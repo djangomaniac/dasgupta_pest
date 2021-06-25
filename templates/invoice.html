@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href='{% static "css/invoice.css" %}'>
+<br>
+
+<div class="container">
+   <div class="col-md-12">
+      <div class="invoice">
+         <!-- begin invoice-company -->
+         <div class="invoice-company text-inverse f-w-600">
+            <span class="pull-right hidden-print">
+            <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a>
+            </span>
+            <h1>{{ order_obj.company.name }}</h1>
+            <h6>Govt. Authorised Pest and Insect Controller</h6>
+            <h6>SPECIALISED IN : INSECTICIDAL, DE-RATTING, WEED CONTROL, PRE AND POST CONSTRUCTION ANTI-TERMITE SOIL TREATMENT</h6>
+         </div>
+         <!-- end invoice-company -->
+         <!-- begin invoice-header -->
+         <div class="invoice-header">
+            <div class="invoice-from">
+               <small>To,</small>
+               <address class="m-t-5 m-b-5">
+                  <strong class="text-inverse">M/s, {{ order_obj.client.name }}</strong><br>
+                  {{ order_obj.client.address }}<br>
+                  Phone: {{ order_obj.client.phone }}<br>
+                  Email: {{ order_obj.client.email }}
+               </address>
+            </div>
+            <div class="invoice-date">
+               <h3>Invoice No. #{{ order_obj.order_id }}</h3>
+               <div class="date text-inverse m-t-5">{{ order_obj.timestamp }}</div>
+               <hr>
+               <h5>Bill For Month : {{ order_obj.Bill_for_month }}</h5>
+            </div>
+         </div>
+         <!-- end invoice-header -->
+         <!-- begin invoice-content -->
+         <div class="invoice-content">
+            <!-- begin table-responsive -->
+            <div class="table-responsive">
+               <table class="table table-invoice">
+                  <thead>
+                     <tr>
+                        <th>DESCRIPTION OF SERVICE</th>
+                        <th class="text-center" width="10%">AREA(SQFT)</th>
+                        <th class="text-center" width="10%">RATE(PER/SQFT)</th>
+                        <th class="text-center" width="20%">NO. OF SERVICE/S</th>
+                        <th class="text-center" width="20%">AMOUNT</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>
+                           <span class="text-inverse">{{ order_obj.service }}</span><br>
+                           <small>{{ order_obj.service.description }}</small>
+                        </td>
+                        <td class="text-center">{{ order_obj.area }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.no_of_services }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.total }}</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <!-- end table-responsive -->
+            <!-- begin invoice-price -->
+            <div class="invoice-price">
+               <div class="invoice-price-left">
+                  <div class="invoice-price-row">
+                     <div class="sub-price">
+                        <small>SUBTOTAL</small>
+                        <span class="text-inverse"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.total }}</span>
+                     </div>
+<!--                     <div class="sub-price">-->
+<!--                        <i class="fa fa-plus text-muted"></i>-->
+<!--                     </div>-->
+<!--                     <div class="sub-price">-->
+<!--                        <small>PAYPAL FEE (5.4%)</small>-->
+<!--                        <span class="text-inverse">$108.00</span>-->
+<!--                     </div>-->
+                  </div>
+               </div>
+               <div class="invoice-price-right">
+                  <small>TOTAL</small> <span class="f-w-600"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.total }}</span>
+               </div>
+            </div>
+            <!-- end invoice-price -->
+         </div>
+         <!-- end invoice-content -->
+         <!-- begin invoice-note -->
+         <div class="invoice-note">
+            * Make all cheques payable to [Your Company Name]<br>
+            * Payment is due within 30 days<br>
+            * If you have any questions concerning this invoice, contact  [Name, Phone Number, Email]
+         </div>
+         <!-- end invoice-note -->
+         <!-- begin invoice-footer -->
+         <div class="invoice-footer">
+            <p class="text-center m-b-5 f-w-600">
+               THANK YOU FOR YOUR BUSINESS
+            </p>
+            <p class="text-center">
+<!--               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> matiasgallipoli.com</span>-->
+               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> Phone: 9830115916</span>
+               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i> Email: dgsukalyan@gmail.com</span>
+            </p>
+         </div>
+         <!-- end invoice-footer -->
+      </div>
+   </div>
+</div>
+
+{% endblock%}

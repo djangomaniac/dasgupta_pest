@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+            <div class="card card-body">
+                <div class="card-header text-center">
+                    <h5><u>WORKING CHALLAN</u></h5>
+                    <h1>{{ order_obj.company.name }}</h1>
+                    {% if order_obj.company.name == "Dasgupta Enterprise" %}
+                        <h6>139, INDIRA GANDHI ROAD,</h6>
+                        <h6>P.O.: KONNAGAR, DIST: HOOGHLY, PIN: 712235</h6>
+                        <h6>PHONE: 9830115916 / EMAIL: dgsukalyan@gmail.com</h6>
+                    {% else %}
+                        <h6>7K/24, B.R. Mitra Lane, Vaishaly Housing Complex,</h6>
+                        <h6>Ground Floor, P.O.: KONNAGAR, DIST: HOOGHLY, PIN: 712235</h6>
+                        <h6>PHONE: 9830115916 / EMAIL: dgsukalyan@gmail.com</h6>
+                    {% endif %}
+                </div>
+                <hr>
+                <h5>To, M/s, {{ order_obj.client.name }}</h5>
+                <h5>Order Id : {{ order_obj.order_id }}</h5>
+                <h5>Order Date/Time : {{ order_obj.timestamp }}</h5>
+                <hr>
+                <div class="card-body text-center">
+                    <h4><u>We have executed the service upto your satisfaction within time as per your order.</u></h4>
+                    <hr>
+                    <div class="card" style="height: 500px;">
+                        <div class="card-header">
+                            <h3>DESCRIPTON OF SERVICE DONE</h3>
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+                    <br>
+                    <h5 style="text-align: left;">Sign and Return</h5>
+                    <h5 style="text-align: right;">E.&.O.E.</h5>
+                    <h5 style="text-align: right;">For, <b>{{ order_obj.company.name }}</b></h5>
+                    <h5 style="text-align: right;">(Authorised Person)</h5>
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

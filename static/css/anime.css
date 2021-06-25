@@ -1,0 +1,44 @@
+body
+{
+     margin: 0;
+     padding: 0;
+     background-color: #000;
+
+}
+
+.container
+{
+    position: absolute;
+    top: 27%;
+    left: 27%;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+.button
+{
+    position: relative;
+    text-align: center;
+    width: 700px;
+    margin: 50px;
+    padding: 40px;
+    font-size: 25px;
+    color: #15f4ee;
+    font-family: poppins;
+    font-weight: 400;
+    border: 5px solid #15f4ee;
+    letter-spacing: 15px;
+    cursor: pointer;
+    border-radius: 100px;
+    transition: 1s;
+}
+
+.button:hover
+{
+    box-shadow: 0 5px 50px 0 #15f4ee inset, 0 5px 50px 0 #15f4ee,
+                0 5px 50px 0 #15f4ee inset, 0 5px 50px 0 #15f4ee;
+
+}

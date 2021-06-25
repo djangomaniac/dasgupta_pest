@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00435c;">
+  <a class="navbar-brand" href="{% url 'home' %}">CRM</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <div class="dropdown">
+        <button class="dropbtn">Dashboard
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'AC_dashboard' %}">Asian Chemicals</a>
+          <a href="{% url 'DE_dashboard' %}">Dasgupta Enterprise</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Finance
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'finance:ac_finance' %}">Asian Chemicals Finance</a>
+          <a href="{% url 'finance:de_finance' %}">Dasgupta Enterprise Finance</a>
+        </div>
+      </div>
+<!--      <li class="nav-item">-->
+<!--        <a class="nav-link" href="">Sales Cart</a>-->
+<!--      </li>-->
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <span class="navbar-text">Hello, {{ request.user }}</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}" >Logout</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
