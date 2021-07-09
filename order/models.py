@@ -9,8 +9,8 @@ from .utils import unique_order_id_generator
 class Order(models.Model):
     STATUS = (
         ('Pending', 'Pending'),
-        ('Paid(Cash)', 'Paid(Cash)'),
-        ('Paid(A/c)', 'Paid(A/c)'),
+        ('Paid(NEFT)', 'Paid(NEFT)'),
+        ('Paid(CHEQUE)', 'Paid(CHEQUE)'),
     )
     MONTH = (
         ('JANUARY', 'JANUARY'),
@@ -30,11 +30,12 @@ class Order(models.Model):
     client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, null=True, on_delete=models.CASCADE)
-    status = models.CharField(max_length=100, default='Pending', choices=STATUS)
-    Bill_for_month = models.CharField(max_length=100, default='JAN', choices=MONTH)
+    payment = models.CharField(max_length=100, default='Pending', choices=STATUS)
+    work_order_period = models.CharField(max_length=100, default='JAN', choices=MONTH)
     area = models.IntegerField(default=0)
     rate = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     no_of_services = models.IntegerField(default=1)
+    csr = models.IntegerField(default=0)
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     remark = models.TextField(max_length=200, null=True)
     timestamp = models.DateTimeField(auto_now_add=True, null=True)
