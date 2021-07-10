@@ -9,7 +9,7 @@ def DE_create_order(request):
     company = Company.objects.get(name='Dasgupta Enterprise')
     form = OrderForm(initial={'company': company})
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             order = Order.objects.latest('pk')
@@ -27,7 +27,7 @@ def AC_create_order(request):
     company = Company.objects.get(name='Asian Chemicals')
     form = OrderForm(initial={'company': company})
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             order = Order.objects.latest('pk')
@@ -45,7 +45,7 @@ def update_order(request, pk):
     order_obj = Order.objects.get(id=pk)
     form = OrderForm(instance=order_obj)
     if request.method == 'POST':
-        form = OrderForm(request.POST, instance=order_obj)
+        form = OrderForm(request.POST, request.FILES, instance=order_obj)
         if form.is_valid():
             form.save()
             return redirect('client:client_view', order_obj.client.id)
@@ -58,9 +58,20 @@ def update_order(request, pk):
 @login_required(login_url='login')
 def next_order(request, pk):
     order_obj = Order.objects.get(id=pk)
-    form = OrderForm(initial={'client': order_obj.client, 'company': order_obj.company, 'service': order_obj.service, 'area': order_obj.area, 'rate': order_obj.rate})
+    # form = OrderForm(instance=order_obj)
+    form = OrderForm(initial={
+        'client': order_obj.client,
+        'sub_client': order_obj.sub_client,
+        'company': order_obj.company,
+        'service': order_obj.service,
+        'upload_document': order_obj.upload_document,
+        'work_order_period': order_obj.work_order_period,
+        'frequency': order_obj.frequency,
+        'area': order_obj.area,
+        'rate': order_obj.rate,
+    })
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             order = Order.objects.latest('pk')

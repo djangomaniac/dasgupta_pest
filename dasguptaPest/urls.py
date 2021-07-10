@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
 from . import views, DE_views, AC_views
 
@@ -35,4 +37,11 @@ urlpatterns = [
     # #################################################################################
     path('order/', include('order.urls', namespace='order_url')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "Dasgupta Admin"
+admin.site.site_title = "Dasgupta Portal"
+admin.site.index_title = "Dasgupta Dashboard"
 
