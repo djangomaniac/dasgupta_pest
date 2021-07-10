@@ -60,6 +60,8 @@
 				<table class="table table-sm">
 					<tr>
 						<th>Order ID</th>
+						<th>Client</th>
+						<th>Sub Client</th>
 						<th>Service</th>
 						<th>Order Date</th>
 						<th>Payment Status</th>
@@ -72,6 +74,8 @@
 					{% for order in orders %}
 						<tr>
 							<td>{{ order.order_id }}</td>
+							<td>{{ order.client.name }}</td>
+							<td>{{ order.sub_client }}</td>
 							<td>{{ order.service }}</td>
 							<td>{{ order.timestamp }}</td>
 							<td>{{ order.payment }}</td>
