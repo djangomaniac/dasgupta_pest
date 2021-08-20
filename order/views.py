@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
+from finance.models import *
 from django.contrib.auth.decorators import login_required
 
 
@@ -56,9 +57,35 @@ def update_order(request, pk):
 
 
 @login_required(login_url='login')
+def csr_pay(request, pk):
+    order_obj = Order.objects.get(id=pk)
+    order_obj.csr_status = True
+    order_obj.save()
+    order_id = order_obj.order_id
+    amount = order_obj.CSR
+    if order_obj.company.name == 'Dasgupta Enterprise':
+        qs = Bank.objects.filter(company__name='Dasgupta Enterprise')
+        bank = qs[0]
+        bank.amount = bank.amount - float(amount)
+        bank.save()
+        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprise CSR Debit, order: '+str(order_id),
+                                          type='DEBIT', balance=bank.amount)
+        banktransaction.save()
+    elif order_obj.company.name == 'Asian Chemicals':
+        qs = Bank.objects.filter(company__name='Asian Chemicals')
+        bank = qs[0]
+        bank.amount = bank.amount - float(amount)
+        bank.save()
+        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Asian Chemicals CSR Debit, order: '+str(order_id),
+                                          type='DEBIT', balance=bank.amount)
+        banktransaction.save()
+    return redirect('client:client_detail_view', order_obj.client.id)
+
+
+@login_required(login_url='login')
 def next_order(request, pk):
     order_obj = Order.objects.get(id=pk)
-    # form = OrderForm(instance=order_obj)
+    # form = OrderForm(instance=order_obj) 
     form = OrderForm(initial={
         'client': order_obj.client,
         'sub_client': order_obj.sub_client,
@@ -67,8 +94,11 @@ def next_order(request, pk):
         'upload_document': order_obj.upload_document,
         'work_order_period': order_obj.work_order_period,
         'frequency': order_obj.frequency,
+        'bill_raised': order_obj.bill_raised,
         'area': order_obj.area,
         'rate': order_obj.rate,
+        'total': order_obj.total,
+        'challan_text': order_obj.challan_text,
     })
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES)

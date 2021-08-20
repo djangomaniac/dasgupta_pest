@@ -9,5 +9,5 @@ class OrderForm(ModelForm):
         widgets = {
             'order_id': HiddenInput(),
             'company': HiddenInput(),
-            'total': HiddenInput(),
+            # 'total': HiddenInput(),
         }

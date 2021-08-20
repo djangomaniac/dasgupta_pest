@@ -11,6 +11,7 @@
 				<hr>
 				<h4>Email: {{ client.email }}</h4>
 				<h4>Phone: {{ client.phone }}</h4>
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_detail_view' client.id %}">Detail View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
 		</div>
 
@@ -25,7 +26,7 @@
 					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
 				{% else %}
 					<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
-					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
+					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
 				{% endif %}
 				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
@@ -71,7 +72,7 @@
 						<th>Update</th>
 						<th>Next Invoice</th>
 					</tr>
-					{% for order in orders %}
+					{% for order in orders|slice:":10" %}
 						<tr>
 							<td>{{ order.order_id }}</td>
 							<td>{{ order.client.name }}</td>

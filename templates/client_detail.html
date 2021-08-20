@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md">
+			<div class="card text-center text-white card-body" id="client_info">
+				<h5>Contact Information</h5>
+				<hr>
+				<h4>Email: {{ client.email }}</h4>
+				<h4>Phone: {{ client.phone }}</h4>
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_view' client.id %}">Normal View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="card text-center text-white card-body" id="client_management">
+				<h5>Client Management</h5>
+				<hr>
+				<h1 class="text-center">{{ client.name }}</h1>
+				<br>
+<!--				{% if client.company.name == 'Asian Chemicals' %}-->
+<!--					<a class="btn btn-info  btn-sm btn-block" href="{% url 'AC_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>-->
+<!--					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>-->
+<!--				{% else %}-->
+<!--					<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>-->
+<!--					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>-->
+<!--				{% endif %}-->
+				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="card text-center text-white card-body" id="total_order">
+				<h5>Company Details</h5>
+				<hr>
+				<h2 style="text-align: center;padding: 10px">Company - {{ client.company.name }}</h2>
+			</div>
+		</div>
+	</div>
+
+
+	<br>
+	<div class="row">
+		<div class="col">
+			<div class="card text-center card-body" id="search_card">
+				<form method="get">
+				{{ order_filter.form }}
+				<button class="btn btn-info" type="submit">Search</button>
+			  </form>
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<div class="row">
+		<div class="col-md">
+			<div class="card card-body">
+				<table class="table table-sm">
+					<tr>
+						<th class="text-center">Order ID</th>
+                        <th class="text-center">Sub Client</th>
+						<th class="text-center">Remark</th>
+						<th class="text-center">Document</th>
+						<th class="text-center">W.O. Period</th>
+						<th class="text-center">Rate</th>
+						<th class="text-center">TDS</th>
+						<th class="text-center">CSR</th>
+						<th class="text-center">CSR Status</th>
+						<th class="text-center">CSR Payment</th>
+						<th class="text-center">Frequency</th>
+                        <th class="text-center">Bill Raised</th>
+					</tr>
+					{% for order in orders %}
+						<tr>
+							<td class="text-center">{{ order.order_id }}</td>
+							<td class="text-center">{{ order.sub_client }}</td>
+							<td class="text-center">{{ order.remark }}</td>
+                            {% if order.upload_document %}
+<!--							<td>Available&nbsp;<button class="btn-info" href="{{ order.upload_document.url }}"><i class="far fa-file-pdf"></i></button></td>-->
+							<td class="text-center">Available&nbsp;<a href="{{ order.upload_document.url }}" type="button" class="btn btn-sm btn-info"><i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+                            {% else %}
+							<td class="text-center">None</td>
+							{% endif %}
+							<td class="text-center">{{ order.work_order_period }}</td>
+							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.rate }}</td>
+                            <td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.TDS }}</td>
+                            <td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.CSR }}</td>
+                            {% if order.CSR != 0 %}
+								{% if order.csr_status == True %}
+									<td class="bg-success text-white text-center font-weight-bold">Paid</td>
+									<td class="text-center">Paid</td>
+								{% else %}
+									<td class="bg-danger text-white text-center font-weight-bold">Not Paid</td>
+									<td class="text-center"><a href="{% url 'order:csr_pay' order.id %}" type="button" class="btn btn-sm btn-success font-weight-bold">Pay&nbsp;&nbsp;</a></td>
+								{% endif %}
+
+							{% else %}
+								<td class="bg-dark text-white text-center font-weight-bold">Nil</td>
+								<td class="text-center">None</td>
+							{% endif %}
+							<td class="text-center">{{ order.frequency }}</td>
+                            <td class="text-center">{{ order.bill_raised }}</td>
+
+<!--							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>-->
+							<td class="text-center"><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+							<td class="text-center"><a href="{% url 'order:update_order' order.id %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+<!--							<td><a href="{% url 'order:next_order' order.id %}" type="button" class="btn btn-sm btn-info">Next Invoice&nbsp;&nbsp;<i class="fa fa-bolt" aria-hidden="true"></i></a></td>-->
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
