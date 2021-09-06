@@ -3,6 +3,7 @@ from .models import *
 from .forms import *
 from finance.models import *
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
 @login_required(login_url='login')
@@ -54,6 +55,40 @@ def update_order(request, pk):
         'form': form,
     }
     return render(request, 'order_form.html', context)
+
+
+@login_required(login_url='login')
+def amount_pay(request, pk):
+    order_obj = Order.objects.get(id=pk)
+    order_obj.payment = 'Paid'
+    order_obj.payment_date = datetime.date.today()
+    order_obj.save()
+    return redirect('client:invoice_detail_view', order_obj.client.id)
+
+
+@login_required(login_url='login')
+def bank_transfer(request, pk):
+    order_obj = Order.objects.get(id=pk)
+    amount = order_obj.total
+    if order_obj.company.name == 'Dasgupta Enterprise':
+        qs = Bank.objects.filter(company__name='Dasgupta Enterprise')
+        bank = qs[0]
+        bank.amount = bank.amount + float(amount)
+        bank.save()
+        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprise Payment Credit, order: '+str(order_obj.order_id),
+                                          type='CREDIT', balance=bank.amount)
+        banktransaction.save()
+    elif order_obj.company.name == 'Asian Chemicals':
+        qs = Bank.objects.filter(company__name='Asian Chemicals')
+        bank = qs[0]
+        bank.amount = bank.amount + float(amount)
+        bank.save()
+        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Asian Chemicals Payment Credit, order: '+str(order_obj.order_id),
+                                          type='CREDIT', balance=bank.amount)
+        banktransaction.save()
+    order_obj.bank_transfer = True
+    order_obj.save()
+    return redirect('client:invoice_detail_view', order_obj.client.id)
 
 
 @login_required(login_url='login')

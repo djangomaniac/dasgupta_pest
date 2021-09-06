@@ -10,5 +10,7 @@ urlpatterns = [
     path('next_invoice/<int:pk>/', views.next_order, name='next_order'),
     path('<int:pk>/', views.view_order, name='view_order'),
     path('csr_pay/<int:pk>/', views.csr_pay, name='csr_pay'),
+    path('amount_pay/<int:pk>/', views.amount_pay, name='amount_pay'),
+    path('bank_transfer/<int:pk>/', views.bank_transfer, name='bank_transfer'),
     path('invoice/<int:pk>/', views.invoice, name='invoice'),
 ]

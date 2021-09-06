@@ -43,6 +43,24 @@ def client_detail_page(request, pk):
 
 
 @login_required(login_url='login')
+def invoice_detail_page(request, pk):
+    client = Client.objects.get(id=pk)
+    orders = Order.objects.filter(client__name=client.name)
+    total_order = orders.count()
+    order_filter = OrderFilter(request.GET, queryset=orders)
+    orders = order_filter.qs
+    context = {
+        "title": "Clients",
+        "content": "Clients Page",
+        "client": client,
+        "orders": orders,
+        "total_order": total_order,
+        "order_filter": order_filter,
+    }
+    return render(request, 'invoice_detail.html', context)
+
+
+@login_required(login_url='login')
 def create_client(request):
     form = ClientForm()
     if request.method == 'POST':

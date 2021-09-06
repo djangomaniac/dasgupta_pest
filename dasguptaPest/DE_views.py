@@ -5,6 +5,7 @@ from order.models import Order
 from order.filters import OrderFilter
 from client.filters import ClientFilter
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
 @login_required(login_url='login')
@@ -37,5 +38,6 @@ def company_dashboard(request):
         "orders": orders,
         "order_filter": order_filter,
         "client_filter": client_filter,
+        "time": datetime.datetime.now().time(),
     }
     return render(request, 'dashboard.html', context)

@@ -9,8 +9,7 @@ from .utils import unique_order_id_generator
 class Order(models.Model):
     STATUS = (
         ('Pending', 'Pending'),
-        ('Paid(NEFT)', 'Paid(NEFT)'),
-        ('Paid(CHEQUE)', 'Paid(CHEQUE)'),
+        ('Paid', 'Paid'),
     )
     CSR_value = (
         (True, 'Paid'),
@@ -44,6 +43,8 @@ class Order(models.Model):
     rate = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     payment = models.CharField(max_length=100, default='Pending', choices=STATUS)
     payment_details = models.CharField(max_length=100, null=True)
+    payment_date = models.DateField(blank=True, null=True)
+    bank_transfer = models.BooleanField(default=False)
     TDS = models.IntegerField(default=0)
     CSR = models.IntegerField(default=0)
     csr_status = models.BooleanField(default=False, choices=CSR_value)
