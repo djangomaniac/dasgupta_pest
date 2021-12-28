@@ -28,6 +28,8 @@ urlpatterns = [
     path('home/', views.home_page, name='home'),
     path('DE_dashboard/', DE_views.company_dashboard, name='DE_dashboard'),
     path('AC_dashboard/', AC_views.company_dashboard, name='AC_dashboard'),
+    path('AC_superview/', AC_views.superview_page, name='AC_superview'),
+    path('DE_superview/', DE_views.superview_page, name='DE_superview'),
     # #################################################################################
     path('client/', include('client.urls', namespace='client_url')),
     # path('accounts/', include('accounts.urls', namespace='accounts_url')),

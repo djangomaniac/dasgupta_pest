@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="total-orders">
+			  	<div class="card-header">
+			  		<h5 class="card-title">SuperView</h5>
+			  	</div>
+			  	<div class="card-body">
+					<h4>Time : {{ time }}</h4>
+			    	<h1 class="card-title">{{ title }}</h1>
+					{% if title == 'Asian Chemicals' %}
+						<a class="btn btn-danger" href="{% url 'DE_superview' %}">Switch Company&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
+					{% else %}
+						<a class="btn btn-danger" href="{% url 'AC_superview' %}">Switch Company&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
+					{% endif %}
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h5>ORDERS</h5>
+			<hr>
+			<div class="card card-body">
+				<form method="get">
+						{{ order_filter.form }}
+						<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
+				</form>
+			</div>
+			<hr>
+			<div class="card card-body">
+				<table class="table table-sm">
+					<tr>
+						{% if title == 'Asian Chemicals' %}
+						<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
+						{% else %}
+						<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
+						{% endif %}
+					</tr>
+					<tr>
+						<th class="text-center">Client</th>
+						<th class="text-center">Sub client</th>
+						<th class="text-center">Order ID</th>
+						<th class="text-center">Invoice Detail</th>
+						<th class="text-center">Invoice Amount</th>
+						<th class="text-center">TDS</th>
+						<th class="text-center">Payment Date</th>
+						<th class="text-center">Document</th>
+						<th class="text-center">Payment Details</th>
+						<th class="text-center">Remarks</th>
+                        <th class="text-center">CSR</th>
+						<th class="text-center">CSR Status</th>
+						<th></th>
+						<th></th>
+					</tr>
+					{% for order in orders|slice:"::-1" %}
+						<tr>
+							<td class="text-center">{{ order.client }}</td>
+							<td class="text-center">{{ order.sub_client }}</td>
+							<td class="text-center">{{ order.order_id }}</td>
+							<td class="text-center">
+								W.O. Period: {{ order.work_order_period }}<br>
+								Frequency: {{ order.frequency }}<br>
+								For month: {{ order.invoice_for_month }}<br>
+							</td>
+							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.total }}</td>
+							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.TDS }}</td>
+							<td class="text-center">&nbsp;{{ order.payment_date }}</td>
+							{% if order.upload_document %}
+							<td><a href="{{ order.upload_document.url }}">{{ order.upload_document }}</a></td>
+							{% else %}
+							<td class="text-center">None</td>
+							{% endif %}
+							<td class="text-center">&nbsp;{{ order.payment_details }}</td>
+                            <td class="text-center">&nbsp;{{ order.remark }}</td>
+							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.CSR }}</td>
+                            {% if order.CSR != 0 %}
+								{% if order.csr_status == True %}
+									<td class="bg-success text-white text-center font-weight-bold">Paid</td>
+								{% else %}
+									<td class="bg-danger text-white text-center font-weight-bold">Not Paid</td>
+								{% endif %}
+							{% else %}
+								<td class="bg-dark text-white text-center font-weight-bold">Nil</td>
+							{% endif %}
+							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
+						    <td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

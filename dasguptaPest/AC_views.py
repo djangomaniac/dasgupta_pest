@@ -41,3 +41,23 @@ def company_dashboard(request):
         "time": datetime.datetime.now().time(),
     }
     return render(request, 'dashboard.html', context)
+
+
+@login_required(login_url='login')
+def superview_page(request):
+    orders = Order.objects.filter(company__name='Asian Chemicals')
+    order_filter = OrderFilter(request.GET, queryset=orders)
+    orders = order_filter.qs
+    clients = Client.objects.filter(company__name='Asian Chemicals')
+    client_filter = ClientFilter(request.GET, queryset=clients)
+    clients = client_filter.qs
+    context = {
+        "title": "Asian Chemicals",
+        "clients": clients,
+        "orders": orders,
+        "order_filter": order_filter,
+        "client_filter": client_filter,
+        "time": datetime.datetime.now().time(),
+    }
+    return render(request, 'superview.html', context)
+

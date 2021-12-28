@@ -99,21 +99,27 @@ def csr_pay(request, pk):
     order_id = order_obj.order_id
     amount = order_obj.CSR
     if order_obj.company.name == 'Dasgupta Enterprise':
-        qs = Bank.objects.filter(company__name='Dasgupta Enterprise')
-        bank = qs[0]
-        bank.amount = bank.amount - float(amount)
-        bank.save()
-        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprise CSR Debit, order: '+str(order_id),
-                                          type='DEBIT', balance=bank.amount)
-        banktransaction.save()
+        qs = Cashbox.objects.filter(company__name='Dasgupta Enterprise')
+        cashbox = qs[0]
+        cashbox.amount = cashbox.amount - float(amount)
+        cashbox.save()
+        # banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprise CSR Debit, order: '+str(order_id),
+        #                                   type='DEBIT', balance=bank.amount)
+        # banktransaction.save()
+        cashtransaction = CashboxTransaction(company=cashbox.company, amount=float(amount), remark='Dasgupta Enterprise CSR Debit, order: '+str(order_id),
+                                             type='DEBIT', balance=cashbox.amount)
+        cashtransaction.save()
     elif order_obj.company.name == 'Asian Chemicals':
-        qs = Bank.objects.filter(company__name='Asian Chemicals')
-        bank = qs[0]
-        bank.amount = bank.amount - float(amount)
-        bank.save()
-        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Asian Chemicals CSR Debit, order: '+str(order_id),
-                                          type='DEBIT', balance=bank.amount)
-        banktransaction.save()
+        qs = Cashbox.objects.filter(company__name='Asian Chemicals')
+        cashbox = qs[0]
+        cashbox.amount = cashbox.amount - float(amount)
+        cashbox.save()
+        # banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Asian Chemicals CSR Debit, order: '+str(order_id),
+        #                                   type='DEBIT', balance=bank.amount)
+        # banktransaction.save()
+        cashtransaction = CashboxTransaction(company=cashbox.company, amount=float(amount), remark='Asian Chemicals CSR Debit, order: '+str(order_id),
+                                             type='DEBIT', balance=cashbox.amount)
+        cashtransaction.save()
     return redirect('client:client_detail_view', order_obj.client.id)
 
 

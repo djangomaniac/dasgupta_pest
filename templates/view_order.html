@@ -23,7 +23,9 @@
                 <hr>
                 <h5>To, M/s, {{ order_obj.client.name }}</h5>
                 <h5>Order Id : {{ order_obj.order_id }}</h5>
-                <h5>Order Date/Time : {{ order_obj.timestamp }}</h5>
+                <label for="date">Work-Order Date/Time</label>
+                <input type="text" id="date" name="date" value="{{ order_obj.date }}">
+<!--                <h5>Order Date/Time : {{ order_obj.timestamp }}</h5>-->
                 <hr>
                 <div class="card-body text-center">
                     <h4><u>We have executed the service upto your satisfaction within time as per your order.</u></h4>

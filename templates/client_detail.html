@@ -74,7 +74,7 @@
 						<th class="text-center">Frequency</th>
                         <th class="text-center">Bill Raised</th>
 					</tr>
-					{% for order in orders %}
+					{% for order in orders|slice:"::-1"|slice:":30" %}
 						<tr>
 							<td class="text-center">{{ order.order_id }}</td>
 							<td class="text-center">{{ order.sub_client }}</td>

@@ -32,7 +32,7 @@
             </div>
             <div class="invoice-date">
                <h3>Invoice No. #{{ order_obj.order_id }}</h3>
-               <div class="date text-inverse m-t-5">{{ order_obj.timestamp }}</div>
+               <div class="date text-inverse m-t-5">Date: {{ order_obj.date }}</div>
                <hr>
                <h5>Bill For Month : {{ order_obj.invoice_for_month }}</h5>
             </div>
@@ -55,13 +55,43 @@
                   <tbody>
                      <tr>
                         <td>
-                           <span class="text-inverse">{{ order_obj.service }}</span><br>
-                           <small>{{ order_obj.service.description }}</small>
+                           <span class="text-inverse">{{ order_obj.service_1 }}</span><br>
+                           <small>{{ order_obj.service_1.description }}</small>
                         </td>
                         <td class="text-center">{{ order_obj.area }}</td>
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
                         <td class="text-center">{{ order_obj.frequency }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.total }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_1 }}</td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <span class="text-inverse">{{ order_obj.service_2 }}</span><br>
+                           <small>{{ order_obj.service_2.description }}</small>
+                        </td>
+                        <td class="text-center">{{ order_obj.area }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_2 }}</td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <span class="text-inverse">{{ order_obj.service_3 }}</span><br>
+                           <small>{{ order_obj.service_3.description }}</small>
+                        </td>
+                        <td class="text-center">{{ order_obj.area }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_3 }}</td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <span class="text-inverse">{{ order_obj.service_4 }}</span><br>
+                           <small>{{ order_obj.service_4.description }}</small>
+                        </td>
+                        <td class="text-center">{{ order_obj.area }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_4 }}</td>
                      </tr>
                   </tbody>
                </table>

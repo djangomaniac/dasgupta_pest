@@ -69,13 +69,13 @@
 						<th class="text-center">Payment Date</th>
 						<th class="text-center">Mode of Payment</th>
 						<th class="text-center">Payment Status</th>
-						<th class="text-center">Pay</th>
+						<th class="text-center">To Bank</th>
 						<th class="text-center">Payment Details</th>
 						<th class="text-center">Remarks</th>
                         <th class="text-center">CSR</th>
 						<th class="text-center">CSR Status</th>
 					</tr>
-					{% for order in orders %}
+					{% for order in orders|slice:"::-1"|slice:":30" %}
 						<tr>
 							<td class="text-center">{{ order.order_id }}</td>
 							<td class="text-center">{{ order.sub_client }}</td>
@@ -94,7 +94,11 @@
 							{% else %}
 								<td class="bg-success text-white text-center font-weight-bold">&nbsp;Paid</td>
 								{% if order.bank_transfer == False %}
-									<td class="text-center"><a href="{% url 'order:bank_transfer' order.id %}" type="button" class="btn btn-sm btn-success font-weight-bold">To Bank ->&nbsp;&nbsp;</a></td>
+									{% if request.user.is_superuser %}
+										<td class="text-center"><a href="{% url 'order:bank_transfer' order.id %}" type="button" class="btn btn-sm btn-success font-weight-bold">Transfer Now ->&nbsp;&nbsp;</a></td>
+									{% else %}
+										<td class="bg-danger text-white text-center font-weight-bold">&nbsp;Not Transferred</td>
+									{% endif %}
 								{% else %}
 									<td class="bg-success text-white text-center font-weight-bold">&nbsp;Transferred</td>
 								{% endif %}

@@ -11,5 +11,5 @@ class OrderForm(ModelForm):
             'company': HiddenInput(),
             'payment_date': HiddenInput(),
             'bank_transfer': HiddenInput(),
-            # 'total': HiddenInput(),
+            'total': HiddenInput(),
         }
