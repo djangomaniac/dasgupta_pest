@@ -4,6 +4,7 @@ from service.models import Service
 from client.models import Client
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_order_id_generator
+import datetime
 
 
 class Order(models.Model):
@@ -30,16 +31,25 @@ class Order(models.Model):
         ('DECEMBER', 'DECEMBER'),
     )
     order_id = models.CharField(max_length=120, null=True, blank=True)
+    uid = models.CharField(max_length=4, null=True, blank=True)
     client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
     sub_client = models.CharField(max_length=120, null=True, blank=True)
     service_1 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_1')
+    price_1 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    area_1 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_1 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     service_2 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_2')
+    price_2 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    area_2 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_2 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     service_3 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_3')
+    price_3 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    area_3 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_3 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     service_4 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_4')
+    price_4 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    area_4 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_4 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     upload_document = models.FileField(upload_to="document_uploaded/", blank=True)
     work_order_period = models.CharField(max_length=100, null=True)
@@ -47,8 +57,8 @@ class Order(models.Model):
     date = models.CharField(max_length=20, null=True)
     frequency = models.CharField(max_length=100, null=True)
     bill_raised = models.CharField(max_length=100, null=True)
-    area = models.IntegerField(default=0)
-    rate = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
+    # area = models.IntegerField(default=0)
+    # rate = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     payment = models.CharField(max_length=100, default='Pending', choices=STATUS)
     payment_details = models.CharField(max_length=100, null=True)
     payment_date = models.DateField(blank=True, null=True)
@@ -66,9 +76,32 @@ class Order(models.Model):
 
 
 def pre_save_create_order_id(sender, instance, *args, **kwargs):
+    dt = datetime.datetime.now()
     if not instance.order_id:
-        instance.order_id = unique_order_id_generator(instance)
-    instance.total = float(instance.rate_1) + float(instance.rate_2) + float(instance.rate_3) + float(instance.rate_4)
+        instance.uid = unique_order_id_generator(instance)
+        if instance.company.name == "Dasgupta Enterprise":
+            instance.order_id = "DE/" + instance.uid + "/" + dt.strftime("%b") + "/" + dt.strftime("%Y")  # for order_id formatting
+        else:
+            instance.order_id = "AC/" + instance.uid + "/" + dt.strftime("%b") + "/" + dt.strftime("%Y")  # for order_id formatting
+            # instance.order_id = unique_order_id_generator(instance)
+    try:
+        instance.rate_1 = float(instance.price_1) / float(instance.area_1)
+        instance.rate_2 = float(instance.price_2) / float(instance.area_2)
+        instance.rate_3 = float(instance.price_3) / float(instance.area_3)
+        instance.rate_4 = float(instance.price_4) / float(instance.area_4)
+    except ZeroDivisionError:  # ignore division by zero
+        if instance.area_1 == 0:
+            instance.rate_1 = 0
+        if instance.area_2 == 0:
+            instance.rate_2 = 0
+        if instance.area_3 == 0:
+            instance.rate_3 = 0
+        if instance.area_4 == 0:
+            instance.rate_4 = 0
+
+        # print("division by zero")
+
+    instance.total = float(instance.price_1) + float(instance.price_2) + float(instance.price_3) + float(instance.price_4)
 
 
 pre_save.connect(pre_save_create_order_id, sender=Order)

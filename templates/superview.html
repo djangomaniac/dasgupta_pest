@@ -10,7 +10,7 @@
 			  		<h5 class="card-title">SuperView</h5>
 			  	</div>
 			  	<div class="card-body">
-					<h4>Time : {{ time }}</h4>
+					<h4>Time:&nbsp;<span id='time' ></span></h4>
 			    	<h1 class="card-title">{{ title }}</h1>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'DE_superview' %}">Switch Company&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
@@ -99,6 +99,15 @@
 		</div>
 	</div>
 </div>
-
+<script>
+	`use strict`;
+	function display_ct() {
+		var hour = new Date().getHours();
+		var min =  new Date().getMinutes();
+		var sec = new Date().getSeconds();
+		var x = hour + ":" + min + ":" + sec;
+		document.getElementById('time').innerHTML = x;
+	}	 setInterval(display_ct, 1000);
+</script>
 
 {% endblock %}

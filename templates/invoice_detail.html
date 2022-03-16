@@ -12,7 +12,7 @@
 				<h4>Email: {{ client.email }}</h4>
 				<h4>Phone: {{ client.phone }}</h4>
 				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_view' client.id %}">Normal View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
-				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_detail_view' client.id %}">Work Order Detail View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_detail_view' client.id %}">Work Order Detail View(CSR Status)&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
 		</div>
 
@@ -35,9 +35,10 @@
 
 		<div class="col-md">
 			<div class="card text-center text-white card-body" id="total_order">
-				<h5>Company Details</h5>
+				<h5>Page Details</h5>
 				<hr>
 				<h2 style="text-align: center;padding: 10px">Company - {{ client.company.name }}</h2>
+				<h2 style="text-align: center;padding: 10px">Payment Details Page</h2>
 			</div>
 		</div>
 	</div>

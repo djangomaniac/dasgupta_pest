@@ -11,10 +11,14 @@
       <div class="invoice">
          <!-- begin invoice-company -->
          <div class="invoice-company text-inverse f-w-600">
-            <span class="pull-right hidden-print">
-            <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a>
-            </span>
-            <h1>{{ order_obj.company.name }}</h1>
+<!--            <span class="pull-right hidden-print">-->
+<!--            <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a>-->
+<!--            </span>-->
+            {% if order_obj.company.name == 'Asian Chemicals' %}
+               <h1 style="color:white; background-image: linear-gradient(to right, green, white); border-radius: 10px;">&nbsp;{{ order_obj.company.name }}</h1>
+            {% else %}
+               <h1 style="color:white; background-image: linear-gradient(to right, red, white); border-radius: 10px;">&nbsp;{{ order_obj.company.name }}</h1>
+            {% endif %}
             <h6>Govt. Authorised Pest and Insect Controller</h6>
             <h6>SPECIALISED IN : INSECTICIDAL, DE-RATTING, WEED CONTROL, PRE AND POST CONSTRUCTION ANTI-TERMITE SOIL TREATMENT</h6>
          </div>
@@ -53,46 +57,54 @@
                      </tr>
                   </thead>
                   <tbody>
+                     {% if order_obj.service_1.name != 'None' %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_1 }}</span><br>
                            <small>{{ order_obj.service_1.description }}</small>
                         </td>
-                        <td class="text-center">{{ order_obj.area }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.area_1 }}</td>
+                        <td class="text-center">&nbsp;{{ order_obj.rate_1 }}</td>
                         <td class="text-center">{{ order_obj.frequency }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_1 }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_1 }}</td>
                      </tr>
+                     {% endif %}
+                     {% if order_obj.service_2.name != 'None' %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_2 }}</span><br>
                            <small>{{ order_obj.service_2.description }}</small>
                         </td>
-                        <td class="text-center">{{ order_obj.area }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.area_2 }}</td>
+                        <td class="text-center">&nbsp;{{ order_obj.rate_2 }}</td>
                         <td class="text-center">{{ order_obj.frequency }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_2 }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_2 }}</td>
                      </tr>
+                     {% endif %}
+                     {% if order_obj.service_3.name != 'None' %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_3 }}</span><br>
                            <small>{{ order_obj.service_3.description }}</small>
                         </td>
-                        <td class="text-center">{{ order_obj.area }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.area_3 }}</td>
+                        <td class="text-center">&nbsp;{{ order_obj.rate_3 }}</td>
                         <td class="text-center">{{ order_obj.frequency }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_3 }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_3 }}</td>
                      </tr>
+                     {% endif %}
+                     {% if order_obj.service_4.name != 'None' %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_4 }}</span><br>
                            <small>{{ order_obj.service_4.description }}</small>
                         </td>
-                        <td class="text-center">{{ order_obj.area }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate }}</td>
+                        <td class="text-center">{{ order_obj.area_4 }}</td>
+                        <td class="text-center">&nbsp;{{ order_obj.rate_4 }}</td>
                         <td class="text-center">{{ order_obj.frequency }}</td>
-                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.rate_4 }}</td>
+                        <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_4 }}</td>
                      </tr>
+                     {% endif %}
                   </tbody>
                </table>
             </div>

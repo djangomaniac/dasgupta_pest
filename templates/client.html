@@ -11,8 +11,8 @@
 				<hr>
 				<h4>Email: {{ client.email }}</h4>
 				<h4>Phone: {{ client.phone }}</h4>
-				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_detail_view' client.id %}">Work Order Detail View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
-				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:invoice_detail_view' client.id %}">Invoice Detail View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_detail_view' client.id %}">Work Order Detail View(CSR Status)&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:invoice_detail_view' client.id %}">Payment Status (INVOICE) View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
 		</div>
 
@@ -38,6 +38,8 @@
 				<h5>Company Details</h5>
 				<hr>
 				<h2 style="text-align: center;padding: 10px">Company - {{ client.company.name }}</h2>
+				<h2 style="text-align: center;padding: 10px">Total Order - {{ total_order }}</h2>
+				<h2 style="text-align: center;padding: 10px">Last Paid - {{ last_paid.order_id }}</h2>
 			</div>
 		</div>
 	</div>
@@ -78,7 +80,11 @@
 							<td>{{ order.client.name }}</td>
 							<td>{{ order.sub_client }}</td>
 							<td>{{ order.timestamp }}</td>
-							<td>{{ order.payment }}</td>
+							{% if order.payment == 'Paid' %}
+							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>
+							{% else %}
+							<td class="bg-danger text-white text-center font-weight-bold">{{ order.payment }}</td>
+							{% endif %}
 							{% if order.upload_document %}
 							<td><a href="{{ order.upload_document.url }}">{{ order.upload_document }}</a></td>
 							{% else %}

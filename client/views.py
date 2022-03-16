@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 def client_page(request, pk):
     client = Client.objects.get(id=pk)
     orders = Order.objects.filter(client__name=client.name)
+    last_paid = orders.filter(payment='Paid').last()
     total_order = orders.count()
     order_filter = OrderFilter(request.GET, queryset=orders)
     orders = order_filter.qs
@@ -20,6 +21,7 @@ def client_page(request, pk):
         "orders": orders,
         "total_order": total_order,
         "order_filter": order_filter,
+        "last_paid": last_paid,
     }
     return render(request, 'client.html', context)
 

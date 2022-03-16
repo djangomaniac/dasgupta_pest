@@ -24,7 +24,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECRET_KEY = ['#(k-xj@u)=nfdrkq3r^0tr%fatfs$#!_mw2(rvw^u1%focgt3a']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['asianchem-erp1.herokuapp.com', '127.0.0.1']
 

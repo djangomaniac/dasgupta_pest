@@ -7,7 +7,7 @@
 {% endfor %}
 <br>
 
-<div class="row">
+<div class="row" onload=display_ct();>
 	<div class="col">
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="total-orders">
@@ -15,7 +15,7 @@
 			  		<h5 class="card-title">ACTIVE ACCOUNT</h5>
 			  	</div>
 			  	<div class="card-body">
-					<h4>Time : {{ time }}</h4>
+					<h4>Time:&nbsp;<span id='time' ></span></h4>
 			    	<h1 class="card-title">{{ title }}</h1>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'DE_dashboard' %}">Switch Account&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
@@ -118,15 +118,19 @@
 					<tr>
 						<th>Order Id</th>
 						<th>Customer</th>
-						<th>Status</th>
+						<th>Payment Status</th>
 						<th></th>
 						<th></th>
 					</tr>
-					{% for order in orders|slice:":20" %}
+					{% for order in orders|slice:"::-1"|slice:":15" %}
 						<tr>
 							<td>{{ order.order_id }}</td>
 							<td>{{ order.client }}</td>
-							<td>{{ order.status }}</td>
+							{% if order.payment == 'Paid' %}
+							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>
+							{% else %}
+							<td class="bg-danger text-white text-center font-weight-bold">{{ order.payment }}</td>
+							{% endif %}
 							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
 						    <td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
 						</tr>
@@ -136,5 +140,14 @@
 		</div>
 	</div>
 </div>
-
+<script>
+	`use strict`;
+	function display_ct() {
+		var hour = new Date().getHours();
+		var min =  new Date().getMinutes();
+		var sec = new Date().getSeconds();
+		var x = hour + ":" + min + ":" + sec;
+		document.getElementById('time').innerHTML = x;
+	}	 setInterval(display_ct, 1000);
+</script>
 {% endblock %}
