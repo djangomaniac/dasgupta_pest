@@ -22,13 +22,6 @@
 				<hr>
 				<h1 class="text-center">{{ client.name }}</h1>
 				<br>
-<!--				{% if client.company.name == 'Asian Chemicals' %}-->
-<!--					<a class="btn btn-info  btn-sm btn-block" href="{% url 'AC_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>-->
-<!--					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>-->
-<!--				{% else %}-->
-<!--					<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>-->
-<!--					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>-->
-<!--				{% endif %}-->
 				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
 		</div>
@@ -47,7 +40,7 @@
 	<br>
 	<div class="row">
 		<div class="col">
-			<div class="card text-center card-body" id="search_card">
+			<div class="card text-center card-body border-gradient-red" id="search_card">
 				<form method="get">
 				{{ order_filter.form }}
 				<button class="btn btn-info" type="submit">Search</button>
@@ -59,16 +52,14 @@
 
 	<div class="row">
 		<div class="col-md">
-			<div class="card card-body">
-				<table class="table table-sm">
-					<tr>
+			<div class="card card-body border-gradient-red" id="listview-card">
+				<table class="table text-center table-sm">
+					<tr class="text-white">
 						<th class="text-center">Order ID</th>
                         <th class="text-center">Sub Client</th>
 						<th class="text-center">Remark</th>
 						<th class="text-center">Document</th>
 						<th class="text-center">W.O. Period</th>
-<!--						<th class="text-center">Rate</th>-->
-						<th class="text-center">TDS</th>
 						<th class="text-center">CSR</th>
 						<th class="text-center">CSR Status</th>
 						<th class="text-center">CSR Payment</th>
@@ -76,7 +67,7 @@
                         <th class="text-center">Bill Raised</th>
 					</tr>
 					{% for order in orders|slice:"::-1"|slice:":30" %}
-						<tr>
+						<tr style="background-color:{{ order.colour_code }};">
 							<td class="text-center">{{ order.order_id }}</td>
 							<td class="text-center">{{ order.sub_client }}</td>
 							<td class="text-center">{{ order.remark }}</td>
@@ -87,8 +78,6 @@
 							<td class="text-center">None</td>
 							{% endif %}
 							<td class="text-center">{{ order.work_order_period }}</td>
-<!--							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.rate }}</td>-->
-                            <td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.TDS }}</td>
                             <td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.CSR }}</td>
                             {% if order.CSR != 0 %}
 								{% if order.csr_status == True %}
@@ -107,7 +96,7 @@
 
 <!--							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>-->
 							<td class="text-center"><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
-							<td class="text-center"><a href="{% url 'order:update_order' order.id %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+							<td class="text-center"><a href="{% url 'order:update_order' order.id 0 %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
 <!--							<td><a href="{% url 'order:next_order' order.id %}" type="button" class="btn btn-sm btn-info">Next Invoice&nbsp;&nbsp;<i class="fa fa-bolt" aria-hidden="true"></i></a></td>-->
 						</tr>
 					{% endfor %}

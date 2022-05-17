@@ -2,13 +2,10 @@
 
 {% block content %}
 
-{% for message in messages %}
-	<p id="messages">{{ message }}</p>
-{% endfor %}
 <br>
 
-<div class="row" onload=display_ct();>
-	<div class="col">
+<div class="container-fluid" onload=display_ct();>
+	<div class="row">
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="total-orders">
 			  	<div class="card-header">
@@ -17,6 +14,7 @@
 			  	<div class="card-body">
 					<h4>Time:&nbsp;<span id='time' ></span></h4>
 			    	<h1 class="card-title">{{ title }}</h1>
+					<hr>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'DE_dashboard' %}">Switch Account&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
 					{% else %}
@@ -25,41 +23,38 @@
 			  	</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="col">
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-ordered">
-			  	<div class="card-header">
-			  		<h5 class="card-title">DASHBOARD</h5>
-			  	</div>
-			  	<div class="card-body">
-			    	<p class="card-title" style="font-size: 2rem;">{{ content }}</p><hr><br>
+				<div class="card-header">
+					<h5 class="card-title">DASHBOARD</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-title" style="font-size: 2rem;">{{ content }}</p><hr><br>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'AC_superview' %}">Super View&nbsp;&nbsp;&nbsp;<i class="bi bi-view-list"></i></a>
 					{% else %}
 						<a class="btn btn-danger" href="{% url 'DE_superview' %}">Super View&nbsp;&nbsp;&nbsp;<i class="bi bi-view-list"></i></a>
 					{% endif %}
-			  	</div>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="col">
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-delivered">
-			  	<div class="card-header">
-			  		<h5 class="card-title">Finance</h5>
-			  	</div>
-			  	<div class="card-body">
-			    	<h1 class="card-title">Cash = {{ cashbox.amount }}</h1>
+				<div class="card-header">
+					<h5 class="card-title">FINANCE</h5>
+				</div>
+				<div class="card-body">
+					<h1 class="card-title">Cash = {{ cashbox.amount }}</h1>
 					<h1 class="card-title">Bank = {{ bank.amount }}</h1>
+					<hr>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'finance:ac_finance' %}">Finance Page&nbsp;&nbsp;&nbsp;<i class="bi bi-graph-up"></i></a>
 					{% else %}
 						<a class="btn btn-danger" href="{% url 'finance:de_finance' %}">Finance Page&nbsp;&nbsp;&nbsp;<i class="bi bi-graph-up"></i></a>
 					{% endif %}
-			  	</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -70,25 +65,27 @@
 		<div class="col-md-6">
 			<h5>CLIENTS</h5>
 			<hr>
-			<div class="card card-body">
+			<div class="card card-body text-center border-gradient-red" id="search_card">
 				<form method="get">
-						{{ client_filter.form }}
-						<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
+					{{ client_filter.form }}
+					<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
 				</form>
 			</div>
 			<hr>
-			<div class="card card-body">
+			<div class="card text-center card-body border-gradient-purple" id="listview-card-dash">
 				<a class="btn btn-success btn-sm btn-block" href="{% url 'client:create_client' %}">Create Client&nbsp;&nbsp;<i class="fa fa-user-plus" aria-hidden="true"></i></a>
 				<table class="table table-sm">
 					<tr>
 						<th>Client</th>
 						<th>Email</th>
+						<th>Phone</th>
 						<th></th>
 					</tr>
 					{% for client in clients|slice:":20" %}
 						<tr>
 							<td>{{ client.name }}</td>
 							<td>{{ client.email }}</td>
+							<td>{{ client.phone }}</td>
 							<td><a type="button" class="btn btn-sm btn-info" href="{% url 'client:client_view' client.id %}">View&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
 						</tr>
 					{% endfor %}
@@ -99,33 +96,28 @@
 		<div class="col-md-6">
 			<h5>ORDERS</h5>
 			<hr>
-			<div class="card card-body">
+			<div class="card card-body text-center border-gradient-purple" id="search_card">
 				<form method="get">
 						{{ order_filter.form }}
 						<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
 				</form>
 			</div>
 			<hr>
-			<div class="card card-body">
+			<div class="card text-center card-body border-gradient-red" id="listview-card-dash">
 				<table class="table table-sm">
 					<tr>
-						{% if title == 'Asian Chemicals' %}
-						<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-						{% else %}
-						<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-						{% endif %}
-					</tr>
-					<tr>
 						<th>Order Id</th>
-						<th>Customer</th>
+						<th>Head Client</th>
+						<th>Sub Client</th>
 						<th>Payment Status</th>
 						<th></th>
 						<th></th>
 					</tr>
 					{% for order in orders|slice:"::-1"|slice:":15" %}
-						<tr>
+						<tr style="background-color:{{ order.colour_code }};">
 							<td>{{ order.order_id }}</td>
 							<td>{{ order.client }}</td>
+							<td>{{ order.sub_client }}</td>
 							{% if order.payment == 'Paid' %}
 							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>
 							{% else %}

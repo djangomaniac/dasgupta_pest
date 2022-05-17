@@ -2,15 +2,12 @@
 
 {% block content %}
 
-{% for message in messages %}
-	<p id="messages">{{ message }}</p>
-{% endfor %}
 <br>
 
-<div class="row">
-	<div class="col">
+<div class="container-fluid">
+	<div class="row">
 		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="total-orders">
+			<div class="card text-center text-white  mb-3" id="finance-card">
 				<div class="card-header">
 					{% if title == 'Asian Chemicals' %}
 					<a class="btn btn-danger" href="{% url 'AC_dashboard' %}"><i class="fa fa-tachometer"></i>&nbsp;&nbsp;&nbsp;Back To Dashboard</a>
@@ -30,9 +27,9 @@
 			    	<h1 class="card-title">Cash = <i class="fa fa-rupee"></i> {{ cashbox.amount }}</h1>
                     <form id="myFormCash" action="" method="POST"> {% csrf_token %}
 						<label for="amount">Amount:</label>
-  						<input type="text" id="amount" name="amount" value="0" style="border-radius: 10px;height: 40px;background-color: #5ec7d2;color: white;font-size: 25px;"><br>
+  						<input type="text" id="amount" name="amount" value="0"><br>
 						<label for="remark">Remark:</label>
-						<input type="text" id="remark" name="remark" value="" style="border-radius: 10px;height: 40px;background-color: #5ec7d2;color: white;font-size: 25px;"><br>
+						<input type="text" id="remark" name="remark" value=""><br>
 						<input type="hidden" id="hidden_type" name="hidden_type" value="cash">
 						<input class="btn btn-info" type="submit" name="action" value="CREDIT" />
 						<input class="btn btn-info" type="submit" name="action" value="DEBIT" />
@@ -40,33 +37,8 @@
 			  	</div>
 			</div>
 		</div>
-	</div>
-<!--	<div class="col-md-2">-->
-<!--		<div class="row-md">-->
-<!--			<div class="card text-center text-white  mb-3" id="total-orders">-->
-<!--			  	<div class="card-header">-->
-<!--					<h5 class="card-title">Auto Transactions</h5>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div><hr><br>-->
-<!--		<div class="row-md">-->
-<!--			<div class="card text-center text-white  mb-3" id="total-orders">-->
-<!--				<div class="card-body">-->
-<!--					<button class="btn btn-info" id="To_Bank"> >> </button>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--		<div class="row-md">-->
-<!--			<div class="card text-center text-white  mb-3" id="total-orders">-->
-<!--				<div class="card-body">-->
-<!--					<button class="btn btn-info" id="To_Cash"> << </button>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-<!--	</div>-->
-    <div class="col">
 		<div class="col-md">
-			<div class="card text-center text-white  mb-3" id="total-orders">
+			<div class="card text-center text-white  mb-3" id="finance-card">
 			  	<div class="card-header">
 					{% if title == 'Asian Chemicals' %}
 					<a class="btn btn-danger" href="{% url 'AC_dashboard' %}"><i class="fa fa-tachometer"></i>&nbsp;&nbsp;&nbsp;Back To Dashboard</a>
@@ -86,9 +58,9 @@
 			    	<h1 class="card-title">Bank = <i class="fa fa-rupee"></i> {{ bank.amount }}</h1>
 					<form id="myFormBank" action="" method="POST"> {% csrf_token %}
 						<label for="amount">Amount:</label>
-  						<input type="text" id="amount" name="amount" value="0" style="border-radius: 10px;height: 40px;background-color: #5ec7d2;color: white;font-size: 25px;"><br>
+  						<input type="text" id="amount" name="amount" value="0"><br>
 						<label for="remark">Remark:</label>
-						<input type="text" id="remark" name="remark" value="" style="border-radius: 10px;height: 40px;background-color: #5ec7d2;color: white;font-size: 25px;"><br>
+						<input type="text" id="remark" name="remark" value=""><br>
 						<input type="hidden" id="hdden_type" name="hidden_type" value="bank">
 						<input class="btn btn-info" type="submit" name="action" value="CREDIT" />
 						<input class="btn btn-info" type="submit" name="action" value="DEBIT" />
@@ -97,15 +69,14 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md">
 			<h5>Transactions :</h5>
-			<div class="card card-body">
-				<table class="table table-sm">
+			<div class="card card-body" id="txn-card">
+				<table class="table text-white table-sm">
 					<tr>
 						<th>DR/CR</th>
 						<th>Amount</th>
@@ -113,21 +84,21 @@
 						<th>Cash Balance</th>
 					</tr>
 					{% for transaction in cashtransactions|slice:"::-1"|slice:":15" %}
-                    <tr>
-                        <td>{{ transaction.type }}</td>
-                        <td>{{ transaction.amount }}</td>
-                        <td>{{ transaction.remark }}</td>
+					<tr>
+						<td>{{ transaction.type }}</td>
+						<td>{{ transaction.amount }}</td>
+						<td>{{ transaction.remark }}</td>
 						<td>{{ transaction.balance }}</td>
-                    </tr>
+					</tr>
 					{% endfor %}
 				</table>
 			</div>
 		</div>
 
-		<div class="col-md-6">
+		<div class="col-md">
 			<h5>Transaction :</h5>
-			<div class="card card-body">
-				<table class="table table-sm">
+			<div class="card card-body" id="txn-card">
+				<table class="table text-white table-sm">
 					<tr>
 						<th>DR/CR</th>
 						<th>Amount</th>

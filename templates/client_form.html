@@ -3,18 +3,19 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-md"></div>
-        <div class="col-md">
-            <h3>Client Creation Form</h3>
+        <div class="col-md text-center">
             <br>
-            <form action="" method="POST"> {% csrf_token %}
-                <table border="1">
-                    {{ form }}
-                </table>
-                <input type="submit" name="Submit">
-            </form>
+            <h3>Work-Order/Sub-Client Creation Form</h3>
+            <br>
+            <div class="card text-white card-body border-gradient-purple" id="form-order">
+                <div class="form-group">
+                    <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                        {{ form.as_p }}
+                        <input class="btn btn-primary" type="submit" name="Submit">
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="col-md"></div>
     </div>
 </div>
 

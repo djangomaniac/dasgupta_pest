@@ -11,6 +11,7 @@
 				<hr>
 				<h4>Email: {{ client.email }}</h4>
 				<h4>Phone: {{ client.phone }}</h4>
+				<hr>
 				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:client_detail_view' client.id %}">Work Order Detail View(CSR Status)&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 				<a class="btn btn-info  btn-sm btn-block" href="{% url 'client:invoice_detail_view' client.id %}">Payment Status (INVOICE) View&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
@@ -21,65 +22,106 @@
 				<h5>Client Management</h5>
 				<hr>
 				<h1 class="text-center">{{ client.name }}</h1>
-				<br>
+				<hr>
 				{% if client.company.name == 'Asian Chemicals' %}
 					<a class="btn btn-info  btn-sm btn-block" href="{% url 'AC_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
-					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
+					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' client.id %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
 				{% else %}
 					<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
-					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
+					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' client.id %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
 				{% endif %}
 				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+				<a class="btn btn-success  btn-sm btn-block" href="{% url 'client:create_sub_client' %}">Create Sub Client / Work-Order&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
 		</div>
 
 		<div class="col-md">
 			<div class="card text-center text-white card-body" id="total_order">
-				<h5>Company Details</h5>
+				<h3>Company Details</h3>
 				<hr>
 				<h2 style="text-align: center;padding: 10px">Company - {{ client.company.name }}</h2>
-				<h2 style="text-align: center;padding: 10px">Total Order - {{ total_order }}</h2>
-				<h2 style="text-align: center;padding: 10px">Last Paid - {{ last_paid.order_id }}</h2>
+				<hr>
+				<h3 style="text-align: center;padding: 10px">Total Order - {{ total_order }}</h3>
+				<h4 style="text-align: center;padding: 10px"></h4>
 			</div>
 		</div>
 	</div>
-
-
 	<br>
 	<div class="row">
 		<div class="col">
-			<div class="card text-center card-body" id="search_card">
+			<div class="card text-center card-body border-gradient-red" id="search_card">
 				<form method="get">
-				{{ order_filter.form }}
-				<button class="btn btn-info" type="submit">Search</button>
-			  </form>
+					{{ sub_client_filter.form }}
+					<button class="btn btn-info" type="submit">Search</button>
+			  	</form>
 			</div>
 		</div>
 	</div>
 	<br>
-
 	<div class="row">
 		<div class="col-md">
-			<div class="card card-body">
-				<table class="table table-sm">
+			<div class="card card-body border-gradient-purple" id="listview-card-dash">
+				<table class="table text-center table-sm">
 					<tr>
-						<th>Order ID</th>
+						<th>Sub-Client/Work-Order</th>
+						<th>Work-Order Period</th>
+						<th>Work-Order Document</th>
+						<th>Phone</th>
+						<th>Email</th>
+						<th>Update</th>
+						<th>View</th>
+					</tr>
+					{% for sub_client in sub_clients %}
+					<tr>
+						<td>{{ sub_client.name }}</td>
+						<td>{{ sub_client.work_order_period }}</td>
+						{% if sub_client.upload_document %}
+							<td class="text-center">Available&nbsp;<a href="{{ sub_client.upload_document.url }}" type="button" class="btn btn-sm btn-info"><i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+						{% else %}
+							<td>None</td>
+						{% endif %}
+						<td>{{ sub_client.phone }}</td>
+						<td>{{ sub_client.email }}</td>
+						<td><a type="button" class="btn btn-danger  btn-sm" href="{% url 'client:update_sub_client' sub_client.id %}">Update&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a></td>
+						<td><a type="button" class="btn btn-sm btn-info" href="{% url 'client:sub_client_page' sub_client.id %}">View&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col">
+			<div class="card text-center card-body border-gradient-red" id="search_card">
+				<form method="get">
+					{{ order_filter.form }}
+					<button class="btn btn-info" type="submit">Search</button>
+			  	</form>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md">
+			<div class="card card-body border-gradient-purple" id="listview-card-dash">
+				<table class="table text-center table-sm">
+					<tr>
+						<th>Invoice No.</th>
 						<th>Client</th>
-						<th>Sub Client</th>
-						<th>Order Date</th>
+						<th>Sub-Client/Work-Order</th>
 						<th>Payment Status</th>
 						<th>Document</th>
 						<th>Challan</th>
 						<th>Invoice</th>
 						<th>Update</th>
-						<th>Next Invoice</th>
+						<th>Repeat Invoice</th>
 					</tr>
 					{% for order in orders|slice:"::-1"|slice:":30" %}
-						<tr>
+						<tr style="background-color:{{ order.colour_code }};">
 							<td>{{ order.order_id }}</td>
 							<td>{{ order.client.name }}</td>
 							<td>{{ order.sub_client }}</td>
-							<td>{{ order.timestamp }}</td>
 							{% if order.payment == 'Paid' %}
 							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>
 							{% else %}
@@ -92,8 +134,8 @@
 							{% endif %}
 							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
 							<td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
-							<td><a href="{% url 'order:update_order' order.id %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
-							<td><a href="{% url 'order:next_order' order.id %}" type="button" class="btn btn-sm btn-info">Next Invoice&nbsp;&nbsp;<i class="fa fa-bolt" aria-hidden="true"></i></a></td>
+							<td><a href="{% url 'order:update_order' order.id 0 %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+							<td><a href="{% url 'order:next_order' order.id %}" type="button" class="btn btn-sm btn-info">Repeat Invoice&nbsp;&nbsp;<i class="fa fa-bolt" aria-hidden="true"></i></a></td>
 						</tr>
 					{% endfor %}
 				</table>

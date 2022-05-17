@@ -2,22 +2,23 @@
 
 {% block content %}
 <br>
-<div class="row">
-	<div class="col">
+<div class="container-fluid">
+	<div class="row">
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="total-orders">
-			  	<div class="card-header">
-			  		<h5 class="card-title">SuperView</h5>
-			  	</div>
-			  	<div class="card-body">
+				<div class="card-header">
+					<h5 class="card-title">SuperView</h5>
+				</div>
+				<div class="card-body">
 					<h4>Time:&nbsp;<span id='time' ></span></h4>
-			    	<h1 class="card-title">{{ title }}</h1>
+					<h1 class="card-title">{{ title }}</h1>
+					<hr>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'DE_superview' %}">Switch Company&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
 					{% else %}
 						<a class="btn btn-danger" href="{% url 'AC_superview' %}">Switch Company&nbsp;&nbsp;&nbsp;<i class="bi bi-arrow-left-right"></i></a>
 					{% endif %}
-			  	</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -28,29 +29,23 @@
 		<div class="col-md-12">
 			<h5>ORDERS</h5>
 			<hr>
-			<div class="card card-body">
-				<form method="get">
+			<div class="card text-center card-body border-gradient-purple" id="search_card">
+				<div class="form-group">
+					<form method="get">
 						{{ order_filter.form }}
 						<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
 				</form>
+				</div>
 			</div>
 			<hr>
-			<div class="card card-body">
+			<div class="card card-body border-gradient-red" id="listview-card-dash">
 				<table class="table table-sm">
-					<tr>
-						{% if title == 'Asian Chemicals' %}
-						<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-						{% else %}
-						<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' %}">Create Order&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-						{% endif %}
-					</tr>
 					<tr>
 						<th class="text-center">Client</th>
 						<th class="text-center">Sub client</th>
 						<th class="text-center">Order ID</th>
 						<th class="text-center">Invoice Detail</th>
 						<th class="text-center">Invoice Amount</th>
-						<th class="text-center">TDS</th>
 						<th class="text-center">Payment Date</th>
 						<th class="text-center">Document</th>
 						<th class="text-center">Payment Details</th>
@@ -61,9 +56,9 @@
 						<th></th>
 					</tr>
 					{% for order in orders|slice:"::-1" %}
-						<tr>
-							<td class="text-center">{{ order.client }}</td>
-							<td class="text-center">{{ order.sub_client }}</td>
+						<tr style="background-color:{{ order.colour_code }};">
+							<td class="text-center">{{ order.client }}<br><a type="button" class="btn btn-sm btn-info" href="{% url 'client:client_view' order.client.id %}">View&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
+							<td class="text-center">{{ order.sub_client }}<br><a type="button" class="btn btn-sm btn-info" href="{% url 'client:sub_client_page' order.sub_client.id %}">View&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
 							<td class="text-center">{{ order.order_id }}</td>
 							<td class="text-center">
 								W.O. Period: {{ order.work_order_period }}<br>
@@ -71,10 +66,9 @@
 								For month: {{ order.invoice_for_month }}<br>
 							</td>
 							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.total }}</td>
-							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.TDS }}</td>
 							<td class="text-center">&nbsp;{{ order.payment_date }}</td>
 							{% if order.upload_document %}
-							<td><a href="{{ order.upload_document.url }}">{{ order.upload_document }}</a></td>
+							<td class="text-center">Available&nbsp;<a href="{{ order.upload_document.url }}" type="button" class="btn btn-sm btn-info"><i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
 							{% else %}
 							<td class="text-center">None</td>
 							{% endif %}
@@ -84,14 +78,18 @@
                             {% if order.CSR != 0 %}
 								{% if order.csr_status == True %}
 									<td class="bg-success text-white text-center font-weight-bold">Paid</td>
+									<td class="text-center">Paid</td>
 								{% else %}
 									<td class="bg-danger text-white text-center font-weight-bold">Not Paid</td>
+									<td class="text-center"><a href="{% url 'order:csr_pay' order.id %}" type="button" class="btn btn-sm btn-success font-weight-bold">Pay&nbsp;&nbsp;</a></td>
 								{% endif %}
 							{% else %}
 								<td class="bg-dark text-white text-center font-weight-bold">Nil</td>
+								<td class="text-center">None</td>
 							{% endif %}
 							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
 						    <td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+							<td><a href="{% url 'order:update_order' order.id 1 %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
 						</tr>
 					{% endfor %}
 				</table>

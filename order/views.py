@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import *
+from service.models import *
 from .forms import *
 from finance.models import *
 from django.contrib.auth.decorators import login_required
@@ -7,17 +8,48 @@ import datetime
 
 
 @login_required(login_url='login')
-def DE_create_order(request):
+def DE_create_order(request, pk):
+    client = Client.objects.get(id=pk)
     company = Company.objects.get(name='Dasgupta Enterprise')
-    form = OrderForm(initial={'company': company})
+    form = OrderForm(initial={'company': company, 'client': client})
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             order = Order.objects.latest('pk')
-            return redirect('order:view_order', order.id)
+            sub_client = order.sub_client
+
+            order.service_1 = sub_client.service_1.name
+            order.price_1 = sub_client.price_1
+            order.area_1 = sub_client.area_1
+            order.rate_1 = sub_client.rate_1
+
+            order.service_2 = sub_client.service_2.name
+            order.price_2 = sub_client.price_2
+            order.area_2 = sub_client.area_2
+            order.rate_2 = sub_client.rate_2
+
+            order.service_3 = sub_client.service_3.name
+            order.price_3 = sub_client.price_3
+            order.area_3 = sub_client.area_3
+            order.rate_3 = sub_client.rate_3
+
+            order.service_4 = sub_client.service_4.name
+            order.price_4 = sub_client.price_4
+            order.area_4 = sub_client.area_4
+            order.rate_4 = sub_client.rate_4
+
+            order.work_order_period = sub_client.work_order_period
+            order.frequency = sub_client.frequency
+            order.challan_text = sub_client.challan_text
+            order.upload_document = sub_client.upload_document
+            order.CSR = sub_client.CSR
+
+            order.save()
+            return redirect('client:client_view', order.client.id)
     else:
         form.fields["client"].queryset = Client.objects.filter(company=company)
+        form.fields["sub_client"].queryset = Sub_Client.objects.filter(client=client)
     context = {
         'form': form,
     }
@@ -25,17 +57,48 @@ def DE_create_order(request):
 
 
 @login_required(login_url='login')
-def AC_create_order(request):
+def AC_create_order(request, pk):
+    client = Client.objects.get(id=pk)
     company = Company.objects.get(name='Asian Chemicals')
-    form = OrderForm(initial={'company': company})
+    form = OrderForm(initial={'company': company, 'client': client})
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             order = Order.objects.latest('pk')
-            return redirect('order:view_order', order.id)
+            sub_client = order.sub_client
+
+            order.service_1 = sub_client.service_1.name
+            order.price_1 = sub_client.price_1
+            order.area_1 = sub_client.area_1
+            order.rate_1 = sub_client.rate_1
+
+            order.service_2 = sub_client.service_2.name
+            order.price_2 = sub_client.price_2
+            order.area_2 = sub_client.area_2
+            order.rate_2 = sub_client.rate_2
+
+            order.service_3 = sub_client.service_3.name
+            order.price_3 = sub_client.price_3
+            order.area_3 = sub_client.area_3
+            order.rate_3 = sub_client.rate_3
+
+            order.service_4 = sub_client.service_4.name
+            order.price_4 = sub_client.price_4
+            order.area_4 = sub_client.area_4
+            order.rate_4 = sub_client.rate_4
+
+            order.work_order_period = sub_client.work_order_period
+            order.frequency = sub_client.frequency
+            order.challan_text = sub_client.challan_text
+            order.upload_document = sub_client.upload_document
+            order.CSR = sub_client.CSR
+
+            order.save()
+            return redirect('client:client_view', order.client.id)
     else:
         form.fields["client"].queryset = Client.objects.filter(company=company)
+        form.fields["sub_client"].queryset = Sub_Client.objects.filter(client=client)
     context = {
         'form': form,
     }
@@ -43,14 +106,23 @@ def AC_create_order(request):
 
 
 @login_required(login_url='login')
-def update_order(request, pk):
+def update_order(request, pk, mk):
     order_obj = Order.objects.get(id=pk)
     form = OrderForm(instance=order_obj)
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES, instance=order_obj)
         if form.is_valid():
             form.save()
-            return redirect('client:client_view', order_obj.client.id)
+            if mk == 0:
+                return redirect('client:client_view', order_obj.client.id)
+            if mk == 1:
+                if order_obj.company == 'Asian Chemicals':
+                    return redirect('AC_superview')
+                else:
+                    return redirect('DE_superview')
+            if mk == 3:
+                return redirect('client:sub_client_page', order_obj.sub_client.id)
+
     context = {
         'form': form,
     }
@@ -143,12 +215,14 @@ def next_order(request, pk):
         'area_2': order_obj.area_2,
         'area_3': order_obj.area_3,
         'area_4': order_obj.area_4,
-        'upload_document': order_obj.upload_document,
+        'rate_1': order_obj.rate_1,
+        'rate_2': order_obj.rate_2,
+        'rate_3': order_obj.rate_3,
+        'rate_4': order_obj.rate_4,
         'work_order_period': order_obj.work_order_period,
         'frequency': order_obj.frequency,
         'bill_raised': order_obj.bill_raised,
-        # 'area': order_obj.area,
-        # 'rate': order_obj.rate,
+        'CSR': order_obj.CSR,
         'total': order_obj.total,
         'challan_text': order_obj.challan_text,
     })
@@ -157,7 +231,9 @@ def next_order(request, pk):
         if form.is_valid():
             form.save()
             order = Order.objects.latest('pk')
-            return redirect('order:view_order', order.id)
+            order.upload_document = order_obj.upload_document
+            order.save()
+            return redirect('client:client_view', order.client.id)
     context = {
         'form': form,
     }
@@ -168,7 +244,7 @@ def next_order(request, pk):
 def view_order(request, pk):
     order_obj = Order.objects.get(id=pk)
     context = {
-        "order_obj": order_obj,
+        'order_obj': order_obj,
     }
     return render(request, 'view_order.html', context)
 
@@ -176,7 +252,15 @@ def view_order(request, pk):
 @login_required(login_url='login')
 def invoice(request, pk):
     order_obj = Order.objects.get(id=pk)
+    service_1 = Service.objects.get(name=order_obj.service_1)
+    service_2 = Service.objects.get(name=order_obj.service_2)
+    service_3 = Service.objects.get(name=order_obj.service_3)
+    service_4 = Service.objects.get(name=order_obj.service_4)
     context = {
-        "order_obj": order_obj,
+        'order_obj': order_obj,
+        'service_1': service_1,
+        'service_2': service_2,
+        'service_3': service_3,
+        'service_4': service_4,
     }
     return render(request, 'invoice.html', context)

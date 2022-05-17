@@ -14,3 +14,12 @@ class ClientFilter(django_filters.FilterSet):
         model = Client
         fields = ['name', 'phone']
         # exclude = ['client', 'company', 'status', 'total', 'service']
+
+
+class SubClientFilter(django_filters.FilterSet):
+    name = CharFilter(field_name='name', lookup_expr='icontains')
+    phone = CharFilter(field_name='phone', lookup_expr='icontains')
+
+    class Meta:
+        model = Sub_Client
+        fields = ['name', 'phone']

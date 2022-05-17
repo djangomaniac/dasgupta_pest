@@ -1,7 +1,7 @@
 from django.db import models
 from company.models import Company
 from service.models import Service
-from client.models import Client
+from client.models import *
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_order_id_generator
 import datetime
@@ -30,32 +30,39 @@ class Order(models.Model):
         ('NOVEMBER', 'NOVEMBER'),
         ('DECEMBER', 'DECEMBER'),
     )
+    COLOUR_CODE = (
+        ('#ffffff', 'None'),
+        ('#ffc7c7', 'RED'),
+        ('#99ffcc', 'GREEN'),
+        ('#ffff99', 'YELLOW'),
+    )
     order_id = models.CharField(max_length=120, null=True, blank=True)
     uid = models.CharField(max_length=4, null=True, blank=True)
     client = models.ForeignKey(Client, null=True, on_delete=models.CASCADE)
+    colour_code = models.CharField(max_length=20, default='None', choices=COLOUR_CODE)
     company = models.ForeignKey(Company, null=True, on_delete=models.CASCADE)
-    sub_client = models.CharField(max_length=120, null=True, blank=True)
-    service_1 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_1')
+    sub_client = models.ForeignKey(Sub_Client, null=True, on_delete=models.CASCADE)
+    service_1 = models.CharField(max_length=120, null=True, blank=True)
     price_1 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     area_1 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_1 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    service_2 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_2')
+    service_2 = models.CharField(max_length=120, null=True, blank=True)
     price_2 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     area_2 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_2 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    service_3 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_3')
+    service_3 = models.CharField(max_length=120, null=True, blank=True)
     price_3 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     area_3 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_3 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    service_4 = models.ForeignKey(Service, null=True, on_delete=models.CASCADE, related_name='service_4')
+    service_4 = models.CharField(max_length=120, null=True, blank=True)
     price_4 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     area_4 = models.DecimalField(default=1.00, max_digits=10, decimal_places=2)
     rate_4 = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     upload_document = models.FileField(upload_to="document_uploaded/", blank=True)
-    work_order_period = models.CharField(max_length=100, null=True)
+    work_order_period = models.CharField(max_length=100, null=True, blank=True)
     invoice_for_month = models.CharField(max_length=100, default='JAN', choices=MONTH)
     date = models.CharField(max_length=20, null=True)
-    frequency = models.CharField(max_length=100, null=True)
+    frequency = models.CharField(max_length=100, null=True, blank=True)
     bill_raised = models.CharField(max_length=100, null=True)
     # area = models.IntegerField(default=0)
     # rate = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
@@ -63,27 +70,40 @@ class Order(models.Model):
     payment_details = models.CharField(max_length=100, null=True)
     payment_date = models.DateField(blank=True, null=True)
     bank_transfer = models.BooleanField(default=False)
-    TDS = models.IntegerField(default=0)
+    # TDS = models.IntegerField(default=0)
     CSR = models.IntegerField(default=0)
     csr_status = models.BooleanField(default=False, choices=CSR_value)
     total = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
-    challan_text = models.TextField(max_length=200, null=True)
+    challan_text = models.TextField(max_length=200, null=True, blank=True)
     remark = models.TextField(max_length=200, null=True)
+    serial_no = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.order_id
 
 
+# def post_save_uid_serialize(sender, instance, *args, **kwargs):
+
 def pre_save_create_order_id(sender, instance, *args, **kwargs):
     dt = datetime.datetime.now()
+    order = Order.objects.all().last()
+    if order:
+        print(order.serial_no)
+        serial_no = order.serial_no + 1
+    else:
+        serial_no = 1
     if not instance.order_id:
-        instance.uid = unique_order_id_generator(instance)
+
+        # instance.uid = unique_order_id_generator(instance)
         if instance.company.name == "Dasgupta Enterprise":
-            instance.order_id = "DE/" + instance.uid + "/" + dt.strftime("%b") + "/" + dt.strftime("%Y")  # for order_id formatting
+            instance.order_id = "DE/" + str(serial_no) + "/" + dt.strftime("%b") + "/" + dt.strftime("%Y")  # for order_id formatting
         else:
-            instance.order_id = "AC/" + instance.uid + "/" + dt.strftime("%b") + "/" + dt.strftime("%Y")  # for order_id formatting
+            instance.order_id = "AC/" + str(serial_no) + "/" + dt.strftime("%b") + "/" + dt.strftime("%Y")  # for order_id formatting
             # instance.order_id = unique_order_id_generator(instance)
+    if not instance.serial_no:
+        instance.serial_no = serial_no
+
     try:
         instance.rate_1 = float(instance.price_1) / float(instance.area_1)
         instance.rate_2 = float(instance.price_2) / float(instance.area_2)
@@ -105,3 +125,5 @@ def pre_save_create_order_id(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(pre_save_create_order_id, sender=Order)
+
+# post_save.connect(post_save_uid_serialize, sender=Order)

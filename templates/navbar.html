@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #00435c;">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(#00435c, #b400ff3d);">
   <a class="navbar-brand" href="{% url 'home' %}">Enterprise Management System</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -10,8 +10,8 @@
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'AC_dashboard' %}">Asian Chemicals</a>
           <a href="{% url 'DE_dashboard' %}">Dasgupta Enterprise</a>
+          <a href="{% url 'AC_dashboard' %}">Asian Chemicals</a>
         </div>
       </div>
       <div class="dropdown">
@@ -19,8 +19,17 @@
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'finance:ac_finance' %}">Asian Chemicals Finance</a>
-          <a href="{% url 'finance:de_finance' %}">Dasgupta Enterprise Finance</a>
+          <a href="{% url 'finance:de_finance' %}">Dasgupta Enterprise</a>
+          <a href="{% url 'finance:ac_finance' %}">Asian Chemicals</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Superview
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="{% url 'DE_superview' %}">Dasgupta Enterprise</a>
+          <a href="{% url 'AC_superview' %}">Asian Chemicals</a>
         </div>
       </div>
 <!--      <li class="nav-item">-->
@@ -30,10 +39,10 @@
     <ul class="navbar-nav ml-auto">
       {% if request.user.is_authenticated %}
         <li class="nav-item">
-          <span class="navbar-text">Hello, {{ request.user }}</span>
+          <span class="navbar-text" style="color: white;">Hello, {{ request.user }}</span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}" >Logout</a>
+          <a class="nav-link" href="{% url 'logout' %}" style="color: white;">Logout</a>
         </li>
       {% endif %}
     </ul>

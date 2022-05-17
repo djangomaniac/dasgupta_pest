@@ -21,9 +21,9 @@
                     {% endif %}
                 </div>
                 <hr>
-                <h5>To, M/s, {{ order_obj.client.name }}</h5>
+                <h5>To, M/s, {{ order_obj.sub_client.name }}</h5>
                 <h5>Order Id : {{ order_obj.order_id }}</h5>
-                <label for="date">Work-Order Date/Time</label>
+                <label for="date">Order Date/Time :</label>
                 <input type="text" id="date" name="date" value="{{ order_obj.date }}">
 <!--                <h5>Order Date/Time : {{ order_obj.timestamp }}</h5>-->
                 <hr>

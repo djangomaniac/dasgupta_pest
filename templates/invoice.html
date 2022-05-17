@@ -28,7 +28,7 @@
             <div class="invoice-from">
                <small>To,</small>
                <address class="m-t-5 m-b-5">
-                  <strong class="text-inverse">M/s, {{ order_obj.client.name }}</strong><br>
+                  <strong class="text-inverse">M/s, {{ order_obj.sub_client.name }}</strong><br>
                   {{ order_obj.client.address }}<br>
                   Phone: {{ order_obj.client.phone }}<br>
                   Email: {{ order_obj.client.email }}
@@ -61,11 +61,11 @@
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_1 }}</span><br>
-                           <small>{{ order_obj.service_1.description }}</small>
+                           <small>{{ service_1.description }}</small>
                         </td>
                         <td class="text-center">{{ order_obj.area_1 }}</td>
                         <td class="text-center">&nbsp;{{ order_obj.rate_1 }}</td>
-                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><input type="text" id="frequency" name="frequency" value="{{ order_obj.frequency }}"></td>
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_1 }}</td>
                      </tr>
                      {% endif %}
@@ -73,11 +73,11 @@
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_2 }}</span><br>
-                           <small>{{ order_obj.service_2.description }}</small>
+                           <small>{{ service_2.description }}</small>
                         </td>
                         <td class="text-center">{{ order_obj.area_2 }}</td>
                         <td class="text-center">&nbsp;{{ order_obj.rate_2 }}</td>
-                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><input type="text" id="frequency" name="frequency" value="{{ order_obj.frequency }}"></td>
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_2 }}</td>
                      </tr>
                      {% endif %}
@@ -85,11 +85,11 @@
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_3 }}</span><br>
-                           <small>{{ order_obj.service_3.description }}</small>
+                           <small>{{ service_3.description }}</small>
                         </td>
                         <td class="text-center">{{ order_obj.area_3 }}</td>
                         <td class="text-center">&nbsp;{{ order_obj.rate_3 }}</td>
-                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><input type="text" id="frequency" name="frequency" value="{{ order_obj.frequency }}"></td>
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_3 }}</td>
                      </tr>
                      {% endif %}
@@ -97,11 +97,11 @@
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_4 }}</span><br>
-                           <small>{{ order_obj.service_4.description }}</small>
+                           <small>{{ service_4.description }}</small>
                         </td>
                         <td class="text-center">{{ order_obj.area_4 }}</td>
                         <td class="text-center">&nbsp;{{ order_obj.rate_4 }}</td>
-                        <td class="text-center">{{ order_obj.frequency }}</td>
+                        <td class="text-center"><input type="text" id="frequency" name="frequency" value="{{ order_obj.frequency }}"></td>
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_4 }}</td>
                      </tr>
                      {% endif %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from client.models import Client
 from finance.models import Bank, Cashbox
 from order.models import Order
-from order.filters import OrderFilter
+from order.filters import *
 from client.filters import ClientFilter
 from django.contrib.auth.decorators import login_required
 import datetime

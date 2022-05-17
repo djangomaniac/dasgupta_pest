@@ -1,12 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% for message in messages %}
-	<p id="messages">{{ message }}</p>
-{% endfor %}
 <br>
-<div class="row">
-	<div class="col">
+<div class="container-fluid">
+	<div class="row">
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="total-orders">
 				<div class="card-header">
@@ -24,69 +21,67 @@
 			</div>
 		</div>
 	</div>
-	<hr>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-6">
-				<div class="card text-center card-body" id="search_card">
-					<form method="get">
-						{{ cash_filter.form.as_p }}
-						<button class="btn btn-info" type="submit">Search</button>
-					</form>
-				</div>
-				<h5>Cash Transactions :</h5>
-				<div class="card card-body">
-					<table class="table table-sm">
-						<tr>
-							<th>DR/CR</th>
-							<th>Amount</th>
-							<th>Remark</th>
-							<th>Cash Balance</th>
-							<th>Date/Time</th>
-						</tr>
-						{% for transaction in cashtransactions|slice:"::-1"|slice:":15" %}
-						<tr>
-							<td>{{ transaction.type }}</td>
-							<td>{{ transaction.amount }}</td>
-							<td>{{ transaction.remark }}</td>
-							<td>{{ transaction.balance }}</td>
-							<td>{{ transaction.timestamp }}</td>
-						</tr>
-						{% endfor %}
-					</table>
-				</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card text-center card-body" id="search_card">
+				<form method="get">
+					{{ cash_filter.form.as_p }}
+					<button class="btn btn-info" type="submit">Search</button>
+				</form>
 			</div>
+			<h5>Cash Transactions :</h5>
+			<div class="card card-body" id="listview-card-dash">
+				<table class="table table-sm">
+					<tr>
+						<th>DR/CR</th>
+						<th>Amount</th>
+						<th>Remark</th>
+						<th>Cash Balance</th>
+						<th>Date/Time</th>
+					</tr>
+					{% for transaction in cashtransactions|slice:"::-1"|slice:":15" %}
+					<tr>
+						<td>{{ transaction.type }}</td>
+						<td>{{ transaction.amount }}</td>
+						<td>{{ transaction.remark }}</td>
+						<td>{{ transaction.balance }}</td>
+						<td>{{ transaction.timestamp }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
 
-			<div class="col-md-6">
-				<div class="card text-center card-body" id="search_card">
-					<form method="get">
-						{{ bank_filter.form.as_p }}
-						<button class="btn btn-info" type="submit">Search</button>
-					</form>
-				</div>
-				<h5>Bank Transaction :</h5>
-				<div class="card card-body">
-					<table class="table table-sm">
-						<tr>
-							<th>DR/CR</th>
-							<th>Amount</th>
-							<th>Remark</th>
-							<th>Bank Balance</th>
-							<th>Date/Time</th>
-						</tr>
-						{% for transaction in banktransactions|slice:"::-1"|slice:":15" %}
-						<tr>
-							<td>{{ transaction.type }}</td>
-							<td>{{ transaction.amount }}</td>
-							<td>{{ transaction.remark }}</td>
-							<td>{{ transaction.balance }}</td>
-							<td>{{ transaction.timestamp }}</td>
-						</tr>
-						{% endfor %}
-					</table>
-				</div>
+		<div class="col-md-6">
+			<div class="card text-center card-body" id="search_card">
+				<form method="get">
+					{{ bank_filter.form.as_p }}
+					<button class="btn btn-info" type="submit">Search</button>
+				</form>
+			</div>
+			<h5>Bank Transaction :</h5>
+			<div class="card card-body" id="listview-card-dash">
+				<table class="table table-sm">
+					<tr>
+						<th>DR/CR</th>
+						<th>Amount</th>
+						<th>Remark</th>
+						<th>Bank Balance</th>
+						<th>Date/Time</th>
+					</tr>
+					{% for transaction in banktransactions|slice:"::-1"|slice:":15" %}
+					<tr>
+						<td>{{ transaction.type }}</td>
+						<td>{{ transaction.amount }}</td>
+						<td>{{ transaction.remark }}</td>
+						<td>{{ transaction.balance }}</td>
+						<td>{{ transaction.timestamp }}</td>
+					</tr>
+					{% endfor %}
+				</table>
 			</div>
 		</div>
 	</div>
 </div>
+
 {% endblock %}

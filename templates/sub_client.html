@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md">
+			<div class="card text-center text-white card-body" id="client_info">
+				<h5>Contact Information</h5>
+				<hr>
+				<h3>Email: {{ client.email }}</h3>
+				<h3>Phone: {{ client.phone }}</h3>
+            </div>
+		</div>
+
+		<div class="col-md">
+			<div class="card text-center text-white card-body" id="client_management">
+				<h5>Client Management</h5>
+				<hr>
+				<h1 class="text-center">{{ client.name }}</h1>
+				<br>
+
+				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:client_view' client.client.id %}"><i class="bi bi-box-arrow-up-left"></i></a>
+				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_sub_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
+            </div>
+		</div>
+
+		<div class="col-md">
+			<div class="card text-center text-white card-body" id="total_order">
+				<h5>Order Details</h5>
+				<hr>
+				<h4 style="text-align: center;padding: 2px">Total Order - {{ total_order }}</h4>
+				<h4 style="text-align: center;padding: 2px">Total Paid Order - {{ total_paid_order }}</h4>
+				<h4 style="text-align: center;padding: 2px">Last Paid Order - {{ last_paid_order }}</h4>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md">
+			<div class="card card-body" id="listview-card-dash">
+				<table class="table table-sm">
+					<tr>
+						<th>Order ID</th>
+						<th>Client</th>
+						<th>Sub Client</th>
+						<th>Order Date</th>
+						<th>Payment Status</th>
+						<th>Document</th>
+						<th>Challan</th>
+						<th>Invoice</th>
+						<th>Update</th>
+						<th>Repeat Invoice</th>
+					</tr>
+					{% for order in orders|slice:"::-1"|slice:":30" %}
+						<tr style="background-color:{{ order.colour_code }};">
+							<td>{{ order.order_id }}</td>
+							<td>{{ order.client.name }}</td>
+							<td>{{ order.sub_client }}</td>
+							<td>{{ order.timestamp }}</td>
+							{% if order.payment == 'Paid' %}
+							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>
+							{% else %}
+							<td class="bg-danger text-white text-center font-weight-bold">{{ order.payment }}</td>
+							{% endif %}
+							{% if order.upload_document %}
+							<td><a href="{{ order.upload_document.url }}">{{ order.upload_document }}</a></td>
+							{% else %}
+							<td>None</td>
+							{% endif %}
+							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
+							<td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+							<td><a href="{% url 'order:update_order' order.id 3 %}" type="button" class="btn btn-sm btn-info">Update&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
+							<td><a href="{% url 'order:next_order' order.id %}" type="button" class="btn btn-sm btn-info">Repeat Invoice&nbsp;&nbsp;<i class="fa fa-bolt" aria-hidden="true"></i></a></td>
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
