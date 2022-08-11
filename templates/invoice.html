@@ -30,9 +30,9 @@
                <small>To,</small>
                <address class="m-t-5 m-b-5">
                   <strong class="text-inverse">M/s, {{ order_obj.sub_client.name }}</strong><br>
-                  {{ order_obj.client.address }}<br>
-                  Phone: {{ order_obj.client.phone }}<br>
-                  Email: {{ order_obj.client.email }}
+                  {{ order_obj.sub_client.address }}<br>
+                  Phone: {{ order_obj.sub_client.phone }}<br>
+                  Email: {{ order_obj.sub_client.email }}
                </address>
             </div>
             <div class="invoice-date">
@@ -137,9 +137,9 @@
          <!-- end invoice-content -->
          <!-- begin invoice-note -->
          <div class="invoice-note">
-            * Make all cheques payable to [Your Company Name]<br>
+            * Make all cheques payable to {{ order_obj.company.name }}<br>
             * Payment is due within 30 days<br>
-            * If you have any questions concerning this invoice, contact  [Name, Phone Number, Email]
+            * If you have any questions concerning this invoice please contact us on the information at the bottom of this copy.
          </div>
          <!-- end invoice-note -->
          <!-- begin invoice-footer -->

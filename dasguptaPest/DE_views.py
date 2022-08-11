@@ -3,6 +3,7 @@ from client.models import Client
 from finance.models import Bank, Cashbox
 from order.models import Order
 from order.filters import OrderFilter
+from django.core.paginator import Paginator
 from client.filters import ClientFilter
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -45,18 +46,17 @@ def company_dashboard(request):
 
 @login_required(login_url='login')
 def superview_page(request):
-    orders = Order.objects.filter(company__name='Dasgupta Enterprises')
+    orders = Order.objects.filter(company__name='Dasgupta Enterprises').order_by('-timestamp')
     order_filter = OrderFilter(request.GET, queryset=orders)
     orders = order_filter.qs
-    clients = Client.objects.filter(company__name='Dasgupta Enterprises')
-    client_filter = ClientFilter(request.GET, queryset=clients)
-    clients = client_filter.qs
+    p = Paginator(orders, 20)
+    page = request.GET.get('page')
+    page_order = p.get_page(page)
     context = {
         "title": "Dasgupta Enterprises",
-        "clients": clients,
-        "orders": orders,
+        "orders": page_order,
+        "page_order": page_order,
         "order_filter": order_filter,
-        "client_filter": client_filter,
         "time": datetime.datetime.now().time(),
     }
-    return render(request, 'superview.html', context)
+    return render(request, 'superview_test.html', context)

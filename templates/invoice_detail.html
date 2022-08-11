@@ -55,12 +55,11 @@
 			<div class="card card-body border-gradient-purple" id="listview-card-dash">
 				<table class="table text-center table-sm">
 					<tr>
-						<th class="text-center">Order ID</th>
+						<th class="text-center">Invoice No.</th>
                         <th class="text-center">Sub Client</th>
 						<th class="text-center">Invoice Detail</th>
 						<th class="text-center">Invoice Amount</th>
 						<th class="text-center">Payment Date</th>
-						<th class="text-center">Mode of Payment</th>
 						<th class="text-center">Payment Status</th>
 						<th class="text-center">To Bank</th>
 						<th class="text-center">Payment Details</th>
@@ -79,7 +78,6 @@
 							</td>
 							<td class="text-center"><i class="fa fa-rupee"></i>&nbsp;{{ order.total }}</td>
 							<td class="text-center">&nbsp;{{ order.payment_date }}</td>
-							<td class="text-center">&nbsp;{{ order.payment }}</td>
 							{% if order.payment == 'Pending' %}
 								<td class="bg-danger text-white text-center font-weight-bold">&nbsp;Not Paid</td>
 								<td class="text-center"><a href="{% url 'order:amount_pay' order.id %}" type="button" class="btn btn-sm btn-success font-weight-bold">Pay&nbsp;&nbsp;</a></td>

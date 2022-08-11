@@ -92,8 +92,7 @@ def amount_pay(request, pk):
     order_obj.payment = 'Paid'
     order_obj.payment_date = datetime.date.today()
     order_obj.save()
-    return redirect('client:invoice_detail_view', order_obj.client.id)
-
+    return redirect(request.META['HTTP_REFERER'])
 
 @login_required(login_url='login')
 def bank_transfer(request, pk):
@@ -117,7 +116,7 @@ def bank_transfer(request, pk):
         banktransaction.save()
     order_obj.bank_transfer = True
     order_obj.save()
-    return redirect('client:invoice_detail_view', order_obj.client.id)
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required(login_url='login')
@@ -149,7 +148,7 @@ def csr_pay(request, pk):
         cashtransaction = CashboxTransaction(company=cashbox.company, amount=float(amount), remark='Asian Chemicals CSR Debit, order: '+str(order_id),
                                              type='DEBIT', balance=cashbox.amount)
         cashtransaction.save()
-    return redirect('client:client_detail_view', order_obj.client.id)
+    return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required(login_url='login')

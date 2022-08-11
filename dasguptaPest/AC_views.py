@@ -4,6 +4,7 @@ from finance.models import Bank, Cashbox
 from order.models import Order
 from order.filters import *
 from client.filters import ClientFilter
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import datetime
 
@@ -48,16 +49,15 @@ def superview_page(request):
     orders = Order.objects.filter(company__name='Asian Chemicals')
     order_filter = OrderFilter(request.GET, queryset=orders)
     orders = order_filter.qs
-    clients = Client.objects.filter(company__name='Asian Chemicals')
-    client_filter = ClientFilter(request.GET, queryset=clients)
-    clients = client_filter.qs
+    p = Paginator(orders, 2)
+    page = request.GET.get('page')
+    page_order = p.get_page(page)
     context = {
         "title": "Asian Chemicals",
-        "clients": clients,
-        "orders": orders,
+        "orders": page_order,
+        "page_order": page_order,
         "order_filter": order_filter,
-        "client_filter": client_filter,
         "time": datetime.datetime.now().time(),
     }
-    return render(request, 'superview.html', context)
+    return render(request, 'superview_test.html', context)
 
