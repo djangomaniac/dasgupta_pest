@@ -30,7 +30,11 @@
 					<h5 class="card-title">DASHBOARD</h5>
 				</div>
 				<div class="card-body">
-					<p class="card-title" style="font-size: 2rem;">{{ content }}</p><hr><br>
+					<h3 class="card-title" style="font-size: 2rem;">{{ content }}</h3>
+					{% if request.user.is_superuser %}
+						<h5>SUPERUSER</h5>
+					{% endif %}
+					<hr><br>
 					{% if title == 'Asian Chemicals' %}
 						<a class="btn btn-danger" href="{% url 'AC_superview' %}">Super View&nbsp;&nbsp;&nbsp;<i class="bi bi-view-list"></i></a>
 					{% else %}
@@ -39,7 +43,7 @@
 				</div>
 			</div>
 		</div>
-
+		{% if request.user.is_superuser %}
 		<div class="col-md">
 			<div class="card text-center text-white  mb-3" id="orders-delivered">
 				<div class="card-header">
@@ -57,12 +61,27 @@
 				</div>
 			</div>
 		</div>
+		{% else %}
+		<div class="col-md">
+			<div class="card text-center text-white  mb-3" id="orders-delivered">
+				<div class="card-header">
+					<h5 class="card-title">CLIENTS</h5>
+				</div>
+				<div class="card-body">
+					<h3 class="card-title">No. Of Clients</h3>
+					<h3 class="card-title">{{ clients.count }}</h3>
+					<hr>
+					<a class="btn btn-danger" href="{% url 'client:create_client' %}">Create Client&nbsp;&nbsp;<i class="fa fa-user-plus" aria-hidden="true"></i></a>
+				</div>
+			</div>
+		</div>
+		{% endif %}
 	</div>
 </div>
 
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md">
 			<h5>CLIENTS</h5>
 			<hr>
 			<div class="card card-body text-center border-gradient-red" id="search_card">
@@ -73,63 +92,69 @@
 			</div>
 			<hr>
 			<div class="card text-center card-body border-gradient-purple" id="listview-card-dash">
-				<a class="btn btn-success btn-sm btn-block" href="{% url 'client:create_client' %}">Create Client&nbsp;&nbsp;<i class="fa fa-user-plus" aria-hidden="true"></i></a>
-				<table class="table table-sm">
-					<tr>
-						<th>Client</th>
-						<th>Email</th>
-						<th>Phone</th>
-						<th></th>
-					</tr>
-					{% for client in clients|slice:":20" %}
-						<tr>
-							<td>{{ client.name }}</td>
-							<td>{{ client.email }}</td>
-							<td>{{ client.phone }}</td>
-							<td><a type="button" class="btn btn-sm btn-info" href="{% url 'client:client_view' client.id %}">View&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
-						</tr>
-					{% endfor %}
-				</table>
+				<div class="row">
+				{% for client in clients %}
+					<a style="text-decoration: none; " href="{% url 'client:client_view' client.id%}">
+						<div class="card text-center text-white mb-3 mr-3 ml-3 mt-3" id="client-card">
+							<div class="card-header">
+								<h5 class="card-title">{{ client.name }}</h5>
+							</div>
+							<div class="card-body">
+								<p>Phone : {{ client.phone }}</p>
+								<p>Email : {{ client.email }}</p>
+								<hr>
+							</div>
+						</div>
+					</a>
+				{% endfor %}
+					<a style="text-decoration: none; " href="{% url 'client:create_client' %}">
+						<div class="card text-center text-white mb-3 mr-3 ml-3 mt-3" id="client-card">
+							<div class="card-body">
+								<h1 style="font-size: 7rem;">+</h1>
+							</div>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 
-		<div class="col-md-6">
-			<h5>ORDERS</h5>
-			<hr>
-			<div class="card card-body text-center border-gradient-purple" id="search_card">
-				<form method="get">
-						{{ order_filter.form }}
-						<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>
-				</form>
-			</div>
-			<hr>
-			<div class="card text-center card-body border-gradient-red" id="listview-card-dash">
-				<table class="table table-sm">
-					<tr>
-						<th>Order Id</th>
-						<th>Head Client</th>
-						<th>Sub Client</th>
-						<th>Payment Status</th>
-						<th></th>
-						<th></th>
-					</tr>
-					{% for order in orders|slice:"::-1"|slice:":15" %}
-						<tr style="background-color:{{ order.colour_code }};">
-							<td>{{ order.order_id }}</td>
-							<td>{{ order.client }}</td>
-							<td>{{ order.sub_client }}</td>
-							{% if order.payment == 'Paid' %}
-							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>
-							{% else %}
-							<td class="bg-danger text-white text-center font-weight-bold">{{ order.payment }}</td>
-							{% endif %}
-							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
-						    <td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>
-						</tr>
-					{% endfor %}
-				</table>
-			</div>
-		</div>
+<!--		<div class="col-md-6">-->
+<!--			<h5>ORDERS</h5>-->
+<!--			<hr>-->
+<!--			<div class="card card-body text-center border-gradient-purple" id="search_card">-->
+<!--				<form method="get">-->
+<!--						{{ order_filter.form }}-->
+<!--						<button class="btn btn-info" type="submit">Search&nbsp;&nbsp;<i class="fa fa-search" aria-hidden="true"></i></button>-->
+<!--				</form>-->
+<!--			</div>-->
+<!--			<hr>-->
+<!--			<div class="card text-center card-body border-gradient-red" id="listview-card-dash">-->
+<!--				<table class="table table-sm">-->
+<!--					<tr>-->
+<!--						<th>Order Id</th>-->
+<!--						<th>Head Client</th>-->
+<!--						<th>Sub Client</th>-->
+<!--						<th>Payment Status</th>-->
+<!--						<th></th>-->
+<!--						<th></th>-->
+<!--					</tr>-->
+<!--					{% for order in orders|slice:"::-1"|slice:":15" %}-->
+<!--						<tr style="background-color:{{ order.colour_code }};">-->
+<!--							<td>{{ order.order_id }}</td>-->
+<!--							<td>{{ order.client }}</td>-->
+<!--							<td>{{ order.sub_client }}</td>-->
+<!--							{% if order.payment == 'Paid' %}-->
+<!--							<td class="bg-success text-white text-center font-weight-bold">{{ order.payment }}</td>-->
+<!--							{% else %}-->
+<!--							<td class="bg-danger text-white text-center font-weight-bold">{{ order.payment }}</td>-->
+<!--							{% endif %}-->
+<!--							<td><a href="{% url 'order:view_order' order.id %}" type="button" class="btn btn-sm btn-info">Challan&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>-->
+<!--						    <td><a href="{% url 'order:invoice' order.id %}" type="button" class="btn btn-sm btn-info">Invoice&nbsp;&nbsp;<i class="fa fa-file-text-o" aria-hidden="true"></i></a></td>-->
+<!--						</tr>-->
+<!--					{% endfor %}-->
+<!--				</table>-->
+<!--			</div>-->
+<!--		</div>-->
 	</div>
 </div>
 <script>

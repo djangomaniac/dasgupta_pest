@@ -10,14 +10,14 @@ import datetime
 
 @login_required(login_url='login')
 def company_dashboard(request):
-    qs = Cashbox.objects.filter(company__name='Dasgupta Enterprise')
+    qs = Cashbox.objects.filter(company__name='Dasgupta Enterprises')
     cashbox = qs[0]
-    qs = Bank.objects.filter(company__name='Dasgupta Enterprise')
+    qs = Bank.objects.filter(company__name='Dasgupta Enterprises')
     bank = qs[0]
-    orders = Order.objects.filter(company__name='Dasgupta Enterprise')
+    orders = Order.objects.filter(company__name='Dasgupta Enterprises')
     order_filter = OrderFilter(request.GET, queryset=orders)
     orders = order_filter.qs
-    clients = Client.objects.filter(company__name='Dasgupta Enterprise')
+    clients = Client.objects.filter(company__name='Dasgupta Enterprises')
     client_filter = ClientFilter(request.GET, queryset=clients)
     clients = client_filter.qs
     # customer_filter = CustomerFilter(request.GET, queryset=customers)
@@ -30,8 +30,8 @@ def company_dashboard(request):
     # ordered_orders = orders.filter(status='Ordered').count()
 
     context = {
-        "title": "Dasgupta Enterprise",
-        "content": "Dasgupta Enterprise Dashboard",
+        "title": "Dasgupta Enterprises",
+        "content": "Dasgupta Enterprises Dashboard",
         "clients": clients,
         "cashbox": cashbox,
         "bank": bank,
@@ -45,14 +45,14 @@ def company_dashboard(request):
 
 @login_required(login_url='login')
 def superview_page(request):
-    orders = Order.objects.filter(company__name='Dasgupta Enterprise')
+    orders = Order.objects.filter(company__name='Dasgupta Enterprises')
     order_filter = OrderFilter(request.GET, queryset=orders)
     orders = order_filter.qs
-    clients = Client.objects.filter(company__name='Dasgupta Enterprise')
+    clients = Client.objects.filter(company__name='Dasgupta Enterprises')
     client_filter = ClientFilter(request.GET, queryset=clients)
     clients = client_filter.qs
     context = {
-        "title": "Dasgupta Enterprise",
+        "title": "Dasgupta Enterprises",
         "clients": clients,
         "orders": orders,
         "order_filter": order_filter,

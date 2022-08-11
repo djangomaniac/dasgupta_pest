@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from service.models import *
+from client.models import *
 from .forms import *
 from finance.models import *
 from django.contrib.auth.decorators import login_required
@@ -8,48 +9,26 @@ import datetime
 
 
 @login_required(login_url='login')
-def DE_create_order(request, pk):
+def DE_create_order(request, pk, mk):
+    sub_client = Sub_Client.objects.get(id=mk)
     client = Client.objects.get(id=pk)
-    company = Company.objects.get(name='Dasgupta Enterprise')
-    form = OrderForm(initial={'company': company, 'client': client})
+    company = Company.objects.get(name='Dasgupta Enterprises')
+    form = OrderForm(initial={'company': company, 'client': client, 'sub_client': sub_client})
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
             order = Order.objects.latest('pk')
-            sub_client = order.sub_client
-
-            order.service_1 = sub_client.service_1.name
-            order.price_1 = sub_client.price_1
-            order.area_1 = sub_client.area_1
-            order.rate_1 = sub_client.rate_1
-
-            order.service_2 = sub_client.service_2.name
-            order.price_2 = sub_client.price_2
-            order.area_2 = sub_client.area_2
-            order.rate_2 = sub_client.rate_2
-
-            order.service_3 = sub_client.service_3.name
-            order.price_3 = sub_client.price_3
-            order.area_3 = sub_client.area_3
-            order.rate_3 = sub_client.rate_3
-
-            order.service_4 = sub_client.service_4.name
-            order.price_4 = sub_client.price_4
-            order.area_4 = sub_client.area_4
-            order.rate_4 = sub_client.rate_4
-
             order.work_order_period = sub_client.work_order_period
+            order.work_order_number = sub_client.work_order_number
             order.frequency = sub_client.frequency
-            order.challan_text = sub_client.challan_text
             order.upload_document = sub_client.upload_document
             order.CSR = sub_client.CSR
 
             order.save()
             return redirect('client:client_view', order.client.id)
-    else:
-        form.fields["client"].queryset = Client.objects.filter(company=company)
-        form.fields["sub_client"].queryset = Sub_Client.objects.filter(client=client)
+
     context = {
         'form': form,
     }
@@ -57,48 +36,26 @@ def DE_create_order(request, pk):
 
 
 @login_required(login_url='login')
-def AC_create_order(request, pk):
+def AC_create_order(request, pk, mk):
+    sub_client = Sub_Client.objects.get(id=mk)
     client = Client.objects.get(id=pk)
     company = Company.objects.get(name='Asian Chemicals')
-    form = OrderForm(initial={'company': company, 'client': client})
+    form = OrderForm(initial={'company': company, 'client': client, 'sub_client': sub_client})
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+
             order = Order.objects.latest('pk')
-            sub_client = order.sub_client
-
-            order.service_1 = sub_client.service_1.name
-            order.price_1 = sub_client.price_1
-            order.area_1 = sub_client.area_1
-            order.rate_1 = sub_client.rate_1
-
-            order.service_2 = sub_client.service_2.name
-            order.price_2 = sub_client.price_2
-            order.area_2 = sub_client.area_2
-            order.rate_2 = sub_client.rate_2
-
-            order.service_3 = sub_client.service_3.name
-            order.price_3 = sub_client.price_3
-            order.area_3 = sub_client.area_3
-            order.rate_3 = sub_client.rate_3
-
-            order.service_4 = sub_client.service_4.name
-            order.price_4 = sub_client.price_4
-            order.area_4 = sub_client.area_4
-            order.rate_4 = sub_client.rate_4
-
             order.work_order_period = sub_client.work_order_period
+            work_order_number = sub_client.work_order_number
             order.frequency = sub_client.frequency
-            order.challan_text = sub_client.challan_text
             order.upload_document = sub_client.upload_document
             order.CSR = sub_client.CSR
 
             order.save()
             return redirect('client:client_view', order.client.id)
-    else:
-        form.fields["client"].queryset = Client.objects.filter(company=company)
-        form.fields["sub_client"].queryset = Sub_Client.objects.filter(client=client)
+
     context = {
         'form': form,
     }
@@ -142,12 +99,12 @@ def amount_pay(request, pk):
 def bank_transfer(request, pk):
     order_obj = Order.objects.get(id=pk)
     amount = order_obj.total
-    if order_obj.company.name == 'Dasgupta Enterprise':
-        qs = Bank.objects.filter(company__name='Dasgupta Enterprise')
+    if order_obj.company.name == 'Dasgupta Enterprises':
+        qs = Bank.objects.filter(company__name='Dasgupta Enterprises')
         bank = qs[0]
         bank.amount = bank.amount + float(amount)
         bank.save()
-        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprise Payment Credit, order: '+str(order_obj.order_id),
+        banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprises Payment Credit, order: '+str(order_obj.order_id),
                                           type='CREDIT', balance=bank.amount)
         banktransaction.save()
     elif order_obj.company.name == 'Asian Chemicals':
@@ -170,15 +127,15 @@ def csr_pay(request, pk):
     order_obj.save()
     order_id = order_obj.order_id
     amount = order_obj.CSR
-    if order_obj.company.name == 'Dasgupta Enterprise':
-        qs = Cashbox.objects.filter(company__name='Dasgupta Enterprise')
+    if order_obj.company.name == 'Dasgupta Enterprises':
+        qs = Cashbox.objects.filter(company__name='Dasgupta Enterprises')
         cashbox = qs[0]
         cashbox.amount = cashbox.amount - float(amount)
         cashbox.save()
-        # banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprise CSR Debit, order: '+str(order_id),
+        # banktransaction = BankTransaction(company=bank.company, amount=float(amount), remark='Dasgupta Enterprises CSR Debit, order: '+str(order_id),
         #                                   type='DEBIT', balance=bank.amount)
         # banktransaction.save()
-        cashtransaction = CashboxTransaction(company=cashbox.company, amount=float(amount), remark='Dasgupta Enterprise CSR Debit, order: '+str(order_id),
+        cashtransaction = CashboxTransaction(company=cashbox.company, amount=float(amount), remark='Dasgupta Enterprises CSR Debit, order: '+str(order_id),
                                              type='DEBIT', balance=cashbox.amount)
         cashtransaction.save()
     elif order_obj.company.name == 'Asian Chemicals':
@@ -202,6 +159,7 @@ def next_order(request, pk):
     form = OrderForm(initial={
         'client': order_obj.client,
         'sub_client': order_obj.sub_client,
+        'work_order_number': order_obj.work_order_number,
         'company': order_obj.company,
         'service_1': order_obj.service_1,
         'service_2': order_obj.service_2,
@@ -221,7 +179,6 @@ def next_order(request, pk):
         'rate_4': order_obj.rate_4,
         'work_order_period': order_obj.work_order_period,
         'frequency': order_obj.frequency,
-        'bill_raised': order_obj.bill_raised,
         'CSR': order_obj.CSR,
         'total': order_obj.total,
         'challan_text': order_obj.challan_text,
@@ -252,15 +209,11 @@ def view_order(request, pk):
 @login_required(login_url='login')
 def invoice(request, pk):
     order_obj = Order.objects.get(id=pk)
-    service_1 = Service.objects.get(name=order_obj.service_1)
-    service_2 = Service.objects.get(name=order_obj.service_2)
-    service_3 = Service.objects.get(name=order_obj.service_3)
-    service_4 = Service.objects.get(name=order_obj.service_4)
     context = {
         'order_obj': order_obj,
-        'service_1': service_1,
-        'service_2': service_2,
-        'service_3': service_3,
-        'service_4': service_4,
+        'service_1': order_obj.service_1,
+        'service_2': order_obj.service_2,
+        'service_3': order_obj.service_3,
+        'service_4': order_obj.service_4,
     }
     return render(request, 'invoice.html', context)

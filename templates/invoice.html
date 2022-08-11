@@ -4,6 +4,7 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href='{% static "css/invoice.css" %}'>
+
 <br>
 
 <div class="container">
@@ -36,6 +37,7 @@
             </div>
             <div class="invoice-date">
                <h3>Invoice No. #{{ order_obj.order_id }}</h3>
+               <h5>Work-Order No. - {{ order_obj.work_order_number }}</h5>
                <div class="date text-inverse m-t-5">Date: {{ order_obj.date }}</div>
                <hr>
                <h5>Bill For Month : {{ order_obj.invoice_for_month }}</h5>
@@ -57,7 +59,7 @@
                      </tr>
                   </thead>
                   <tbody>
-                     {% if order_obj.service_1.name != 'None' %}
+                     {% if order_obj.service_1 %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_1 }}</span><br>
@@ -69,7 +71,7 @@
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_1 }}</td>
                      </tr>
                      {% endif %}
-                     {% if order_obj.service_2.name != 'None' %}
+                     {% if order_obj.service_2 %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_2 }}</span><br>
@@ -81,7 +83,7 @@
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_2 }}</td>
                      </tr>
                      {% endif %}
-                     {% if order_obj.service_3.name != 'None' %}
+                     {% if order_obj.service_3 %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_3 }}</span><br>
@@ -93,7 +95,7 @@
                         <td class="text-center"><i class="fa fa-inr" aria-hidden="true"></i>&nbsp;{{ order_obj.price_3 }}</td>
                      </tr>
                      {% endif %}
-                     {% if order_obj.service_4.name != 'None' %}
+                     {% if order_obj.service_4 %}
                      <tr>
                         <td>
                            <span class="text-inverse">{{ order_obj.service_4 }}</span><br>
@@ -146,7 +148,6 @@
                THANK YOU FOR YOUR BUSINESS
             </p>
             <p class="text-center">
-<!--               <span class="m-r-10"><i class="fa fa-fw fa-lg fa-globe"></i> matiasgallipoli.com</span>-->
                <span class="m-r-10"><i class="fa fa-fw fa-lg fa-phone-volume"></i> Phone: 9830115916</span>
                <span class="m-r-10"><i class="fa fa-fw fa-lg fa-envelope"></i> Email: dgsukalyan@gmail.com</span>
             </p>

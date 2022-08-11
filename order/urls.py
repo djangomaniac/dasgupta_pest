@@ -4,8 +4,8 @@ from . import views
 app_name = 'order'
 
 urlpatterns = [
-    path('decreate_order/<int:pk>/', views.DE_create_order, name='decreate_order'),
-    path('accreate_order/<int:pk>/', views.AC_create_order, name='accreate_order'),
+    path('decreate_order/<int:pk>/<int:mk>/', views.DE_create_order, name='decreate_order'),
+    path('accreate_order/<int:pk>/<int:mk>/', views.AC_create_order, name='accreate_order'),
     path('update_order/<int:pk>/<int:mk>/', views.update_order, name='update_order'),
     path('next_invoice/<int:pk>/', views.next_order, name='next_order'),
     path('<int:pk>/', views.view_order, name='view_order'),

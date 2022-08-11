@@ -28,7 +28,6 @@
 					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' client.id %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
 				{% else %}
 					<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
-					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:decreate_order' client.id %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
 				{% endif %}
 				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 				<a class="btn btn-success  btn-sm btn-block" href="{% url 'client:create_sub_client' %}">Create Sub Client / Work-Order&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
@@ -70,6 +69,7 @@
 						<th>Email</th>
 						<th>Update</th>
 						<th>View</th>
+						<th></th>
 					</tr>
 					{% for sub_client in sub_clients %}
 					<tr>
@@ -84,6 +84,11 @@
 						<td>{{ sub_client.email }}</td>
 						<td><a type="button" class="btn btn-danger  btn-sm" href="{% url 'client:update_sub_client' sub_client.id %}">Update&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a></td>
 						<td><a type="button" class="btn btn-sm btn-info" href="{% url 'client:sub_client_page' sub_client.id %}">View&nbsp;&nbsp;<i class="fa fa-share" aria-hidden="true"></i></a></td>
+						{% if client.company.name == 'Asian Chemicals' %}
+							<td><a type="button" class="btn btn-sm btn-info" href="{% url 'order:accreate_order' client.id sub_client.id %}">Create Invoice</a></td>
+						{% else %}
+							<td><a type="button" class="btn btn-sm btn-info" href="{% url 'order:decreate_order' client.id sub_client.id %}">Create Invoice</a></td>
+						{% endif %}
 					</tr>
 					{% endfor %}
 				</table>

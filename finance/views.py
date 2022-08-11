@@ -6,9 +6,9 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='login')
 def DE_finance_page(request):
-    qs = Cashbox.objects.filter(company__name='Dasgupta Enterprise')
+    qs = Cashbox.objects.filter(company__name='Dasgupta Enterprises')
     cashbox = qs[0]
-    qs = Bank.objects.filter(company__name='Dasgupta Enterprise')
+    qs = Bank.objects.filter(company__name='Dasgupta Enterprises')
     bank = qs[0]
 
     if request.method == 'POST':
@@ -44,10 +44,10 @@ def DE_finance_page(request):
                 banktransaction.save()
         return redirect("/finance/de_finance")
 
-    cashtransactions = CashboxTransaction.objects.filter(company__name='Dasgupta Enterprise')
-    banktransactions = BankTransaction.objects.filter(company__name='Dasgupta Enterprise')
+    cashtransactions = CashboxTransaction.objects.filter(company__name='Dasgupta Enterprises')
+    banktransactions = BankTransaction.objects.filter(company__name='Dasgupta Enterprises')
     context = {
-        'title': "Dasgupta Enterprise",
+        'title': "Dasgupta Enterprises",
         'cashbox': cashbox,
         'bank': bank,
         'cashtransactions': cashtransactions,
@@ -110,14 +110,14 @@ def AC_finance_page(request):
 
 @login_required(login_url='login')
 def DE_finance_detail(request):
-    cashtransactions = CashboxTransaction.objects.filter(company__name='Dasgupta Enterprise')
-    banktransactions = BankTransaction.objects.filter(company__name='Dasgupta Enterprise')
+    cashtransactions = CashboxTransaction.objects.filter(company__name='Dasgupta Enterprises')
+    banktransactions = BankTransaction.objects.filter(company__name='Dasgupta Enterprises')
     cash_filter = CashFilter(request.GET, queryset=cashtransactions)
     cashtransactions = cash_filter.qs
     bank_filter = BankFilter(request.GET, queryset=banktransactions)
     banktransactions = bank_filter.qs
     context = {
-        'title': "Dasgupta Enterprise",
+        'title': "Dasgupta Enterprises",
         'cashtransactions': cashtransactions,
         'banktransactions': banktransactions,
         'cash_filter': cash_filter,

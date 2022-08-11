@@ -10,25 +10,27 @@
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'DE_dashboard' %}">Dasgupta Enterprise</a>
+          <a href="{% url 'DE_dashboard' %}">Dasgupta Enterprises</a>
           <a href="{% url 'AC_dashboard' %}">Asian Chemicals</a>
         </div>
       </div>
+      {% if request.user.is_superuser %}
       <div class="dropdown">
         <button class="dropbtn">Finance
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'finance:de_finance' %}">Dasgupta Enterprise</a>
+          <a href="{% url 'finance:de_finance' %}">Dasgupta Enterprises</a>
           <a href="{% url 'finance:ac_finance' %}">Asian Chemicals</a>
         </div>
       </div>
+      {% endif %}
       <div class="dropdown">
         <button class="dropbtn">Superview
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-          <a href="{% url 'DE_superview' %}">Dasgupta Enterprise</a>
+          <a href="{% url 'DE_superview' %}">Dasgupta Enterprises</a>
           <a href="{% url 'AC_superview' %}">Asian Chemicals</a>
         </div>
       </div>
