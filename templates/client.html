@@ -23,12 +23,7 @@
 				<hr>
 				<h1 class="text-center">{{ client.name }}</h1>
 				<hr>
-				{% if client.company.name == 'Asian Chemicals' %}
-					<a class="btn btn-info  btn-sm btn-block" href="{% url 'AC_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
-					<a class="btn btn-success btn-sm btn-block" href="{% url 'order:accreate_order' client.id %}">Create Invoice&nbsp;&nbsp;<i class="fa fa-plus-square" aria-hidden="true"></i></a>
-				{% else %}
-					<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
-				{% endif %}
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'DE_dashboard' %}">Dashboard&nbsp;&nbsp;<i class="fa fa-tachometer" aria-hidden="true"></i></a>
 				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'client:update_client' client.id %}">Update Client&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 				<a class="btn btn-success  btn-sm btn-block" href="{% url 'client:create_sub_client' %}">Create Sub Client / Work-Order&nbsp;&nbsp;<i class="fa fa-wrench" aria-hidden="true"></i></a>
 			</div>
